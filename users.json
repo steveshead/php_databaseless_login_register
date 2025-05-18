@@ -10,7 +10,9 @@
             "card_bg_color": "#ffffff",
             "text_color": "#212529",
             "font_size": "16px",
-            "font_family": "Quicksand"
+            "font_family": "Quicksand",
+            "button_size": "sm",
+            "button_type": "primary"
         },
         "first_name": "Steve",
         "last_name": "Shead"

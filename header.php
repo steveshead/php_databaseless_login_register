@@ -61,6 +61,127 @@ $current_page = basename($_SERVER['PHP_SELF']);
             echo '.bg-primary { background-color: ' . $scheme['primary_color'] . ' !important; }';
         }
 
+        // Apply button size if set
+        if (isset($scheme['button_size']) && !empty($scheme['button_size'])) {
+            $size_class = 'btn-' . $scheme['button_size'];
+            echo '.btn:not(.btn-sm):not(.btn-lg) { ';
+            if ($scheme['button_size'] === 'sm') {
+                echo 'padding: 0.25rem 0.5rem !important; font-size: 0.875rem !important; border-radius: 0.25rem !important;';
+            } elseif ($scheme['button_size'] === 'lg') {
+                echo 'padding: 0.5rem 1rem !important; font-size: 1.25rem !important; border-radius: 0.5rem !important;';
+            }
+            echo ' }';
+        }
+
+        // Apply button type if set
+        if (isset($scheme['button_type']) && $scheme['button_type'] !== 'primary') {
+            // First, reset all buttons to have no specific styling
+            echo '.btn:not([class*="btn-"]) { ';
+            echo 'background-color: transparent !important; border: 1px solid transparent !important; color: #212529 !important;';
+            echo ' }';
+
+            // Then apply the selected button type
+            $type = $scheme['button_type'];
+
+            if (strpos($type, 'outline-') === 0) {
+                // Handle outline button types
+                $color_type = str_replace('outline-', '', $type);
+                echo '.btn:not([class*="btn-outline-"]):not([class*="btn-"]) { ';
+                echo 'background-color: transparent !important; ';
+
+                switch ($color_type) {
+                    case 'primary':
+                        echo 'color: ' . $scheme['primary_color'] . ' !important; border-color: ' . $scheme['primary_color'] . ' !important;';
+                        break;
+                    case 'secondary':
+                        echo 'color: #6c757d !important; border-color: #6c757d !important;';
+                        break;
+                    case 'success':
+                        echo 'color: #198754 !important; border-color: #198754 !important;';
+                        break;
+                    case 'danger':
+                        echo 'color: #dc3545 !important; border-color: #dc3545 !important;';
+                        break;
+                    case 'warning':
+                        echo 'color: #ffc107 !important; border-color: #ffc107 !important;';
+                        break;
+                    case 'info':
+                        echo 'color: #0dcaf0 !important; border-color: #0dcaf0 !important;';
+                        break;
+                    case 'light':
+                        echo 'color: #f8f9fa !important; border-color: #f8f9fa !important;';
+                        break;
+                    case 'dark':
+                        echo 'color: #212529 !important; border-color: #212529 !important;';
+                        break;
+                }
+
+                echo ' }';
+
+                // Add hover effect for outline buttons
+                echo '.btn:not([class*="btn-outline-"]):not([class*="btn-"]):hover { ';
+                switch ($color_type) {
+                    case 'primary':
+                        echo 'background-color: ' . $scheme['primary_color'] . ' !important; color: #fff !important;';
+                        break;
+                    case 'secondary':
+                        echo 'background-color: #6c757d !important; color: #fff !important;';
+                        break;
+                    case 'success':
+                        echo 'background-color: #198754 !important; color: #fff !important;';
+                        break;
+                    case 'danger':
+                        echo 'background-color: #dc3545 !important; color: #fff !important;';
+                        break;
+                    case 'warning':
+                        echo 'background-color: #ffc107 !important; color: #212529 !important;';
+                        break;
+                    case 'info':
+                        echo 'background-color: #0dcaf0 !important; color: #212529 !important;';
+                        break;
+                    case 'light':
+                        echo 'background-color: #f8f9fa !important; color: #212529 !important;';
+                        break;
+                    case 'dark':
+                        echo 'background-color: #212529 !important; color: #fff !important;';
+                        break;
+                }
+                echo ' }';
+            } else {
+                // Handle solid button types
+                echo '.btn:not([class*="btn-"]) { ';
+
+                switch ($type) {
+                    case 'secondary':
+                        echo 'background-color: #6c757d !important; border-color: #6c757d !important; color: #fff !important;';
+                        break;
+                    case 'success':
+                        echo 'background-color: #198754 !important; border-color: #198754 !important; color: #fff !important;';
+                        break;
+                    case 'danger':
+                        echo 'background-color: #dc3545 !important; border-color: #dc3545 !important; color: #fff !important;';
+                        break;
+                    case 'warning':
+                        echo 'background-color: #ffc107 !important; border-color: #ffc107 !important; color: #212529 !important;';
+                        break;
+                    case 'info':
+                        echo 'background-color: #0dcaf0 !important; border-color: #0dcaf0 !important; color: #212529 !important;';
+                        break;
+                    case 'light':
+                        echo 'background-color: #f8f9fa !important; border-color: #f8f9fa !important; color: #212529 !important;';
+                        break;
+                    case 'dark':
+                        echo 'background-color: #212529 !important; border-color: #212529 !important; color: #fff !important;';
+                        break;
+                    case 'link':
+                        echo 'background-color: transparent !important; border-color: transparent !important; color: ' . $scheme['primary_color'] . ' !important; text-decoration: underline !important;';
+                        break;
+                }
+
+                echo ' }';
+            }
+        }
+
         echo '</style>';
     }
     ?>
