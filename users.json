@@ -1,0 +1,20 @@
+[
+    {
+        "username": "steveshead",
+        "email": "steve@steve-shead.com",
+        "password": "$2y$10$ZXp.mkwFq6ACw3CCQkv0Ve46I0RZT\/Rrr\/yV6UF\/8h70P0gYKn2tK",
+        "profile_picture": "uploads\/profile_pictures\/steveshead_1747592808.jpg",
+        "site_settings": {
+            "primary_color": "#0d6efd",
+            "bg_color": "#f8f9fa",
+            "card_bg_color": "#ffffff",
+            "text_color": "#212529",
+            "font_size": "16px",
+            "font_family": "Quicksand",
+            "button_size": "",
+            "button_type": "primary"
+        },
+        "first_name": "Steve",
+        "last_name": "Shead"
+    }
+]
