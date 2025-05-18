@@ -23,6 +23,17 @@ $font_family = 'Roboto'; // Default font family
 $button_size = ''; // Default button size (empty for default size)
 $button_type = 'primary'; // Default button type
 
+// Bootstrap color override settings
+$override_bootstrap_colors = false; // Default to not override bootstrap colors
+$bootstrap_primary_color = '#0d6efd'; // Bootstrap default primary
+$bootstrap_secondary_color = '#6c757d'; // Bootstrap default secondary
+$bootstrap_success_color = '#198754'; // Bootstrap default success
+$bootstrap_danger_color = '#dc3545'; // Bootstrap default danger
+$bootstrap_warning_color = '#ffc107'; // Bootstrap default warning
+$bootstrap_info_color = '#0dcaf0'; // Bootstrap default info
+$bootstrap_light_color = '#f8f9fa'; // Bootstrap default light
+$bootstrap_dark_color = '#212529'; // Bootstrap default dark
+
 // List of allowed Google Fonts
 $allowed_fonts = [
     'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Raleway', 'Poppins', 
@@ -77,6 +88,17 @@ if (file_exists($users_file)) {
                 $font_family = isset($user["site_settings"]["font_family"]) ? $user["site_settings"]["font_family"] : $font_family;
                 $button_size = isset($user["site_settings"]["button_size"]) ? $user["site_settings"]["button_size"] : $button_size;
                 $button_type = isset($user["site_settings"]["button_type"]) ? $user["site_settings"]["button_type"] : $button_type;
+
+                // Get bootstrap color override settings if they exist
+                $override_bootstrap_colors = isset($user["site_settings"]["override_bootstrap_colors"]) ? $user["site_settings"]["override_bootstrap_colors"] : $override_bootstrap_colors;
+                $bootstrap_primary_color = isset($user["site_settings"]["bootstrap_primary_color"]) ? $user["site_settings"]["bootstrap_primary_color"] : $bootstrap_primary_color;
+                $bootstrap_secondary_color = isset($user["site_settings"]["bootstrap_secondary_color"]) ? $user["site_settings"]["bootstrap_secondary_color"] : $bootstrap_secondary_color;
+                $bootstrap_success_color = isset($user["site_settings"]["bootstrap_success_color"]) ? $user["site_settings"]["bootstrap_success_color"] : $bootstrap_success_color;
+                $bootstrap_danger_color = isset($user["site_settings"]["bootstrap_danger_color"]) ? $user["site_settings"]["bootstrap_danger_color"] : $bootstrap_danger_color;
+                $bootstrap_warning_color = isset($user["site_settings"]["bootstrap_warning_color"]) ? $user["site_settings"]["bootstrap_warning_color"] : $bootstrap_warning_color;
+                $bootstrap_info_color = isset($user["site_settings"]["bootstrap_info_color"]) ? $user["site_settings"]["bootstrap_info_color"] : $bootstrap_info_color;
+                $bootstrap_light_color = isset($user["site_settings"]["bootstrap_light_color"]) ? $user["site_settings"]["bootstrap_light_color"] : $bootstrap_light_color;
+                $bootstrap_dark_color = isset($user["site_settings"]["bootstrap_dark_color"]) ? $user["site_settings"]["bootstrap_dark_color"] : $bootstrap_dark_color;
             }
             break;
         }
@@ -94,6 +116,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $new_font_family = trim($_POST["font_family"]);
     $new_button_size = trim($_POST["button_size"]);
     $new_button_type = trim($_POST["button_type"]);
+
+    // Get bootstrap color override data
+    $new_override_bootstrap_colors = isset($_POST["override_bootstrap_colors"]) ? true : false;
+    $new_bootstrap_primary_color = isset($_POST["bootstrap_primary_color"]) ? trim($_POST["bootstrap_primary_color"]) : $bootstrap_primary_color;
+    $new_bootstrap_secondary_color = isset($_POST["bootstrap_secondary_color"]) ? trim($_POST["bootstrap_secondary_color"]) : $bootstrap_secondary_color;
+    $new_bootstrap_success_color = isset($_POST["bootstrap_success_color"]) ? trim($_POST["bootstrap_success_color"]) : $bootstrap_success_color;
+    $new_bootstrap_danger_color = isset($_POST["bootstrap_danger_color"]) ? trim($_POST["bootstrap_danger_color"]) : $bootstrap_danger_color;
+    $new_bootstrap_warning_color = isset($_POST["bootstrap_warning_color"]) ? trim($_POST["bootstrap_warning_color"]) : $bootstrap_warning_color;
+    $new_bootstrap_info_color = isset($_POST["bootstrap_info_color"]) ? trim($_POST["bootstrap_info_color"]) : $bootstrap_info_color;
+    $new_bootstrap_light_color = isset($_POST["bootstrap_light_color"]) ? trim($_POST["bootstrap_light_color"]) : $bootstrap_light_color;
+    $new_bootstrap_dark_color = isset($_POST["bootstrap_dark_color"]) ? trim($_POST["bootstrap_dark_color"]) : $bootstrap_dark_color;
 
     // Validate input (basic validation for hex colors)
     $color_pattern = '/^#[a-fA-F0-9]{6}$/';
@@ -121,6 +154,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = "Invalid button type selected.";
         }
 
+        // Validate bootstrap color override settings if enabled
+        if ($new_override_bootstrap_colors) {
+            if (!preg_match($color_pattern, $new_bootstrap_primary_color)) {
+                $error = "Invalid primary color format. Use hex format (e.g., #0d6efd).";
+            } elseif (!preg_match($color_pattern, $new_bootstrap_secondary_color)) {
+                $error = "Invalid secondary color format. Use hex format (e.g., #6c757d).";
+            } elseif (!preg_match($color_pattern, $new_bootstrap_success_color)) {
+                $error = "Invalid success color format. Use hex format (e.g., #198754).";
+            } elseif (!preg_match($color_pattern, $new_bootstrap_danger_color)) {
+                $error = "Invalid danger color format. Use hex format (e.g., #dc3545).";
+            } elseif (!preg_match($color_pattern, $new_bootstrap_warning_color)) {
+                $error = "Invalid warning color format. Use hex format (e.g., #ffc107).";
+            } elseif (!preg_match($color_pattern, $new_bootstrap_info_color)) {
+                $error = "Invalid info color format. Use hex format (e.g., #0dcaf0).";
+            } elseif (!preg_match($color_pattern, $new_bootstrap_light_color)) {
+                $error = "Invalid light color format. Use hex format (e.g., #f8f9fa).";
+            } elseif (!preg_match($color_pattern, $new_bootstrap_dark_color)) {
+                $error = "Invalid dark color format. Use hex format (e.g., #212529).";
+            }
+        }
+
         // Create or update site settings
         $site_settings = [
             "primary_color" => $new_primary_color,
@@ -130,7 +184,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             "font_size" => $new_font_size,
             "font_family" => $new_font_family,
             "button_size" => $new_button_size,
-            "button_type" => $new_button_type
+            "button_type" => $new_button_type,
+            "override_bootstrap_colors" => $new_override_bootstrap_colors,
+            "bootstrap_primary_color" => $new_bootstrap_primary_color,
+            "bootstrap_secondary_color" => $new_bootstrap_secondary_color,
+            "bootstrap_success_color" => $new_bootstrap_success_color,
+            "bootstrap_danger_color" => $new_bootstrap_danger_color,
+            "bootstrap_warning_color" => $new_bootstrap_warning_color,
+            "bootstrap_info_color" => $new_bootstrap_info_color,
+            "bootstrap_light_color" => $new_bootstrap_light_color,
+            "bootstrap_dark_color" => $new_bootstrap_dark_color
         ];
 
         // Update user in array
@@ -150,10 +213,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $font_family = $new_font_family;
             $button_size = $new_button_size;
             $button_type = $new_button_type;
+            $override_bootstrap_colors = $new_override_bootstrap_colors;
+            $bootstrap_primary_color = $new_bootstrap_primary_color;
+            $bootstrap_secondary_color = $new_bootstrap_secondary_color;
+            $bootstrap_success_color = $new_bootstrap_success_color;
+            $bootstrap_danger_color = $new_bootstrap_danger_color;
+            $bootstrap_warning_color = $new_bootstrap_warning_color;
+            $bootstrap_info_color = $new_bootstrap_info_color;
+            $bootstrap_light_color = $new_bootstrap_light_color;
+            $bootstrap_dark_color = $new_bootstrap_dark_color;
 
-            // Redirect to dashboard page after site settings changes
-            header("Location: dashboard.php");
-            exit();
+            // Set success flag for display
+            $success_message = "Site settings updated successfully!";
         } else {
             $error = "Failed to save site settings changes";
         }
@@ -161,7 +232,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Function to generate site settings preview
-function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family, $button_size = '', $button_type = 'primary') {
+function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family, $button_size = '', $button_type = 'primary', $override_bootstrap_colors = false, $bootstrap_primary = '#0d6efd', $bootstrap_secondary = '#6c757d', $bootstrap_success = '#198754', $bootstrap_danger = '#dc3545', $bootstrap_warning = '#ffc107', $bootstrap_info = '#0dcaf0', $bootstrap_light = '#f8f9fa', $bootstrap_dark = '#212529') {
     // Determine button padding based on size
     $button_padding = '5px 10px'; // Default
     if ($button_size === 'sm') {
@@ -171,7 +242,7 @@ function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family,
     }
 
     // Determine button colors based on type
-    $button_bg = $primary;
+    $button_bg = $override_bootstrap_colors ? $bootstrap_primary : $primary;
     $button_text = 'white';
     $button_border = 'none';
 
@@ -181,90 +252,106 @@ function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family,
         switch ($color_type) {
             case 'primary':
                 $button_bg = 'transparent';
-                $button_text = $primary;
-                $button_border = '1px solid ' . $primary;
+                $button_text = $override_bootstrap_colors ? $bootstrap_primary : $primary;
+                $button_border = '1px solid ' . ($override_bootstrap_colors ? $bootstrap_primary : $primary);
                 break;
             case 'secondary':
                 $button_bg = 'transparent';
-                $button_text = '#6c757d';
-                $button_border = '1px solid #6c757d';
+                $button_text = $override_bootstrap_colors ? $bootstrap_secondary : '#6c757d';
+                $button_border = '1px solid ' . ($override_bootstrap_colors ? $bootstrap_secondary : '#6c757d');
                 break;
             case 'success':
                 $button_bg = 'transparent';
-                $button_text = '#198754';
-                $button_border = '1px solid #198754';
+                $button_text = $override_bootstrap_colors ? $bootstrap_success : '#198754';
+                $button_border = '1px solid ' . ($override_bootstrap_colors ? $bootstrap_success : '#198754');
                 break;
             case 'danger':
                 $button_bg = 'transparent';
-                $button_text = '#dc3545';
-                $button_border = '1px solid #dc3545';
+                $button_text = $override_bootstrap_colors ? $bootstrap_danger : '#dc3545';
+                $button_border = '1px solid ' . ($override_bootstrap_colors ? $bootstrap_danger : '#dc3545');
                 break;
             case 'warning':
                 $button_bg = 'transparent';
-                $button_text = '#ffc107';
-                $button_border = '1px solid #ffc107';
+                $button_text = $override_bootstrap_colors ? $bootstrap_warning : '#ffc107';
+                $button_border = '1px solid ' . ($override_bootstrap_colors ? $bootstrap_warning : '#ffc107');
                 break;
             case 'info':
                 $button_bg = 'transparent';
-                $button_text = '#0dcaf0';
-                $button_border = '1px solid #0dcaf0';
+                $button_text = $override_bootstrap_colors ? $bootstrap_info : '#0dcaf0';
+                $button_border = '1px solid ' . ($override_bootstrap_colors ? $bootstrap_info : '#0dcaf0');
                 break;
             case 'light':
                 $button_bg = 'transparent';
-                $button_text = '#f8f9fa';
-                $button_border = '1px solid #f8f9fa';
+                $button_text = $override_bootstrap_colors ? $bootstrap_light : '#f8f9fa';
+                $button_border = '1px solid ' . ($override_bootstrap_colors ? $bootstrap_light : '#f8f9fa');
                 break;
             case 'dark':
                 $button_bg = 'transparent';
-                $button_text = '#212529';
-                $button_border = '1px solid #212529';
+                $button_text = $override_bootstrap_colors ? $bootstrap_dark : '#212529';
+                $button_border = '1px solid ' . ($override_bootstrap_colors ? $bootstrap_dark : '#212529');
                 break;
             default:
                 $button_bg = 'transparent';
-                $button_text = $primary;
-                $button_border = '1px solid ' . $primary;
+                $button_text = $override_bootstrap_colors ? $bootstrap_primary : $primary;
+                $button_border = '1px solid ' . ($override_bootstrap_colors ? $bootstrap_primary : $primary);
         }
     } else {
         // Handle solid button types
         switch ($button_type) {
             case 'primary':
-                $button_bg = $primary;
+                $button_bg = $override_bootstrap_colors ? $bootstrap_primary : $primary;
                 break;
             case 'secondary':
-                $button_bg = '#6c757d';
+                $button_bg = $override_bootstrap_colors ? $bootstrap_secondary : '#6c757d';
                 break;
             case 'success':
-                $button_bg = '#198754';
+                $button_bg = $override_bootstrap_colors ? $bootstrap_success : '#198754';
                 break;
             case 'danger':
-                $button_bg = '#dc3545';
+                $button_bg = $override_bootstrap_colors ? $bootstrap_danger : '#dc3545';
                 break;
             case 'warning':
-                $button_bg = '#ffc107';
+                $button_bg = $override_bootstrap_colors ? $bootstrap_warning : '#ffc107';
                 $button_text = '#212529';
                 break;
             case 'info':
-                $button_bg = '#0dcaf0';
+                $button_bg = $override_bootstrap_colors ? $bootstrap_info : '#0dcaf0';
                 $button_text = '#212529';
                 break;
             case 'light':
-                $button_bg = '#f8f9fa';
+                $button_bg = $override_bootstrap_colors ? $bootstrap_light : '#f8f9fa';
                 $button_text = '#212529';
                 break;
             case 'dark':
-                $button_bg = '#212529';
+                $button_bg = $override_bootstrap_colors ? $bootstrap_dark : '#212529';
                 break;
             case 'link':
                 $button_bg = 'transparent';
-                $button_text = $primary;
+                $button_text = $override_bootstrap_colors ? $bootstrap_primary : $primary;
                 $button_border = 'none';
                 break;
             default:
-                $button_bg = $primary;
+                $button_bg = $override_bootstrap_colors ? $bootstrap_primary : $primary;
         }
     }
 
-    return "
+    // CSS variables for bootstrap colors if overrides are enabled
+    $bootstrap_vars = '';
+    if ($override_bootstrap_colors) {
+        $bootstrap_vars = "
+        :root {
+            --bs-primary: {$bootstrap_primary};
+            --bs-secondary: {$bootstrap_secondary};
+            --bs-success: {$bootstrap_success};
+            --bs-danger: {$bootstrap_danger};
+            --bs-warning: {$bootstrap_warning};
+            --bs-info: {$bootstrap_info};
+            --bs-light: {$bootstrap_light};
+            --bs-dark: {$bootstrap_dark};
+        }";
+    }
+
+    return $bootstrap_vars . "
         .site-preview {
             padding: 15px;
             border-radius: 5px;
@@ -327,7 +414,7 @@ function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family,
 
                     <!-- Site Settings Preview -->
                     <style>
-                        <?php echo generatePreviewCSS($primary_color, $bg_color, $card_bg_color, $text_color, $font_size, $font_family, $button_size, $button_type); ?>
+                        <?php echo generatePreviewCSS($primary_color, $bg_color, $card_bg_color, $text_color, $font_size, $font_family, $button_size, $button_type, $override_bootstrap_colors, $bootstrap_primary_color, $bootstrap_secondary_color, $bootstrap_success_color, $bootstrap_danger_color, $bootstrap_warning_color, $bootstrap_info_color, $bootstrap_light_color, $bootstrap_dark_color); ?>
                     </style>
 
                     <h5 class="mb-3">Preview:</h5>
@@ -432,6 +519,88 @@ function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family,
                             </div>
                         </div>
 
+                        <h5 class="mt-4 mb-3">Bootstrap Color Overrides</h5>
+                        <div class="mb-3 form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="override_bootstrap_colors" name="override_bootstrap_colors" <?php echo $override_bootstrap_colors ? 'checked' : ''; ?>>
+                            <label class="form-check-label" for="override_bootstrap_colors">Override Bootstrap Colors</label>
+                            <div class="form-text">Enable to override default Bootstrap colors for navbar, buttons, and other elements</div>
+                        </div>
+
+                        <div id="bootstrap_colors_section" class="<?php echo $override_bootstrap_colors ? '' : 'd-none'; ?>">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="bootstrap_primary_color" class="form-label">Primary Color</label>
+                                    <div class="input-group">
+                                        <input type="color" class="form-control form-control-color" id="bootstrap_primary_color" name="bootstrap_primary_color" value="<?php echo htmlspecialchars($bootstrap_primary_color); ?>" title="Choose primary color">
+                                        <input type="text" class="form-control" aria-label="Primary color hex value" value="<?php echo htmlspecialchars($bootstrap_primary_color); ?>" id="bootstrap_primary_color_text" oninput="document.getElementById('bootstrap_primary_color').value = this.value">
+                                    </div>
+                                    <div class="form-text">Used for primary buttons and navigation</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="bootstrap_secondary_color" class="form-label">Secondary Color</label>
+                                    <div class="input-group">
+                                        <input type="color" class="form-control form-control-color" id="bootstrap_secondary_color" name="bootstrap_secondary_color" value="<?php echo htmlspecialchars($bootstrap_secondary_color); ?>" title="Choose secondary color">
+                                        <input type="text" class="form-control" aria-label="Secondary color hex value" value="<?php echo htmlspecialchars($bootstrap_secondary_color); ?>" id="bootstrap_secondary_color_text" oninput="document.getElementById('bootstrap_secondary_color').value = this.value">
+                                    </div>
+                                    <div class="form-text">Used for secondary buttons and elements</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="bootstrap_success_color" class="form-label">Success Color</label>
+                                    <div class="input-group">
+                                        <input type="color" class="form-control form-control-color" id="bootstrap_success_color" name="bootstrap_success_color" value="<?php echo htmlspecialchars($bootstrap_success_color); ?>" title="Choose success color">
+                                        <input type="text" class="form-control" aria-label="Success color hex value" value="<?php echo htmlspecialchars($bootstrap_success_color); ?>" id="bootstrap_success_color_text" oninput="document.getElementById('bootstrap_success_color').value = this.value">
+                                    </div>
+                                    <div class="form-text">Used for success messages and buttons</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="bootstrap_danger_color" class="form-label">Danger Color</label>
+                                    <div class="input-group">
+                                        <input type="color" class="form-control form-control-color" id="bootstrap_danger_color" name="bootstrap_danger_color" value="<?php echo htmlspecialchars($bootstrap_danger_color); ?>" title="Choose danger color">
+                                        <input type="text" class="form-control" aria-label="Danger color hex value" value="<?php echo htmlspecialchars($bootstrap_danger_color); ?>" id="bootstrap_danger_color_text" oninput="document.getElementById('bootstrap_danger_color').value = this.value">
+                                    </div>
+                                    <div class="form-text">Used for error messages and delete buttons</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="bootstrap_warning_color" class="form-label">Warning Color</label>
+                                    <div class="input-group">
+                                        <input type="color" class="form-control form-control-color" id="bootstrap_warning_color" name="bootstrap_warning_color" value="<?php echo htmlspecialchars($bootstrap_warning_color); ?>" title="Choose warning color">
+                                        <input type="text" class="form-control" aria-label="Warning color hex value" value="<?php echo htmlspecialchars($bootstrap_warning_color); ?>" id="bootstrap_warning_color_text" oninput="document.getElementById('bootstrap_warning_color').value = this.value">
+                                    </div>
+                                    <div class="form-text">Used for warning messages and alerts</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="bootstrap_info_color" class="form-label">Info Color</label>
+                                    <div class="input-group">
+                                        <input type="color" class="form-control form-control-color" id="bootstrap_info_color" name="bootstrap_info_color" value="<?php echo htmlspecialchars($bootstrap_info_color); ?>" title="Choose info color">
+                                        <input type="text" class="form-control" aria-label="Info color hex value" value="<?php echo htmlspecialchars($bootstrap_info_color); ?>" id="bootstrap_info_color_text" oninput="document.getElementById('bootstrap_info_color').value = this.value">
+                                    </div>
+                                    <div class="form-text">Used for informational messages</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="bootstrap_light_color" class="form-label">Light Color</label>
+                                    <div class="input-group">
+                                        <input type="color" class="form-control form-control-color" id="bootstrap_light_color" name="bootstrap_light_color" value="<?php echo htmlspecialchars($bootstrap_light_color); ?>" title="Choose light color">
+                                        <input type="text" class="form-control" aria-label="Light color hex value" value="<?php echo htmlspecialchars($bootstrap_light_color); ?>" id="bootstrap_light_color_text" oninput="document.getElementById('bootstrap_light_color').value = this.value">
+                                    </div>
+                                    <div class="form-text">Used for light backgrounds and elements</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="bootstrap_dark_color" class="form-label">Dark Color</label>
+                                    <div class="input-group">
+                                        <input type="color" class="form-control form-control-color" id="bootstrap_dark_color" name="bootstrap_dark_color" value="<?php echo htmlspecialchars($bootstrap_dark_color); ?>" title="Choose dark color">
+                                        <input type="text" class="form-control" aria-label="Dark color hex value" value="<?php echo htmlspecialchars($bootstrap_dark_color); ?>" id="bootstrap_dark_color_text" oninput="document.getElementById('bootstrap_dark_color').value = this.value">
+                                    </div>
+                                    <div class="form-text">Used for dark text and backgrounds</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <button type="button" class="btn btn-secondary" id="reset_colors">Reset to Defaults</button>
                         </div>
@@ -459,9 +628,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonSizeInput = document.getElementById('button_size');
     const buttonTypeInput = document.getElementById('button_type');
 
+    // Bootstrap color override inputs
+    const overrideBootstrapColorsInput = document.getElementById('override_bootstrap_colors');
+    const bootstrapColorsSection = document.getElementById('bootstrap_colors_section');
+    const bootstrapPrimaryColorInput = document.getElementById('bootstrap_primary_color');
+    const bootstrapSecondaryColorInput = document.getElementById('bootstrap_secondary_color');
+    const bootstrapSuccessColorInput = document.getElementById('bootstrap_success_color');
+    const bootstrapDangerColorInput = document.getElementById('bootstrap_danger_color');
+    const bootstrapWarningColorInput = document.getElementById('bootstrap_warning_color');
+    const bootstrapInfoColorInput = document.getElementById('bootstrap_info_color');
+    const bootstrapLightColorInput = document.getElementById('bootstrap_light_color');
+    const bootstrapDarkColorInput = document.getElementById('bootstrap_dark_color');
+
     const bgColorText = document.getElementById('bg_color_text');
     const cardBgColorText = document.getElementById('card_bg_color_text');
     const textColorText = document.getElementById('text_color_text');
+
+    // Bootstrap color override text inputs
+    const bootstrapPrimaryColorText = document.getElementById('bootstrap_primary_color_text');
+    const bootstrapSecondaryColorText = document.getElementById('bootstrap_secondary_color_text');
+    const bootstrapSuccessColorText = document.getElementById('bootstrap_success_color_text');
+    const bootstrapDangerColorText = document.getElementById('bootstrap_danger_color_text');
+    const bootstrapWarningColorText = document.getElementById('bootstrap_warning_color_text');
+    const bootstrapInfoColorText = document.getElementById('bootstrap_info_color_text');
+    const bootstrapLightColorText = document.getElementById('bootstrap_light_color_text');
+    const bootstrapDarkColorText = document.getElementById('bootstrap_dark_color_text');
 
     const resetButton = document.getElementById('reset_colors');
 
@@ -508,6 +699,53 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePreview();
     });
 
+    // Toggle bootstrap color override section
+    overrideBootstrapColorsInput.addEventListener('change', function() {
+        bootstrapColorsSection.classList.toggle('d-none', !this.checked);
+        updatePreview();
+    });
+
+    // Update preview when bootstrap color inputs change
+    bootstrapPrimaryColorInput.addEventListener('input', function() {
+        bootstrapPrimaryColorText.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapSecondaryColorInput.addEventListener('input', function() {
+        bootstrapSecondaryColorText.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapSuccessColorInput.addEventListener('input', function() {
+        bootstrapSuccessColorText.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapDangerColorInput.addEventListener('input', function() {
+        bootstrapDangerColorText.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapWarningColorInput.addEventListener('input', function() {
+        bootstrapWarningColorText.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapInfoColorInput.addEventListener('input', function() {
+        bootstrapInfoColorText.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapLightColorInput.addEventListener('input', function() {
+        bootstrapLightColorText.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapDarkColorInput.addEventListener('input', function() {
+        bootstrapDarkColorText.value = this.value;
+        updatePreview();
+    });
+
     // Update color picker when text input changes
     bgColorText.addEventListener('input', function() {
         bgColorInput.value = this.value;
@@ -524,6 +762,47 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePreview();
     });
 
+    // Update color picker when bootstrap color text inputs change
+    bootstrapPrimaryColorText.addEventListener('input', function() {
+        bootstrapPrimaryColorInput.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapSecondaryColorText.addEventListener('input', function() {
+        bootstrapSecondaryColorInput.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapSuccessColorText.addEventListener('input', function() {
+        bootstrapSuccessColorInput.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapDangerColorText.addEventListener('input', function() {
+        bootstrapDangerColorInput.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapWarningColorText.addEventListener('input', function() {
+        bootstrapWarningColorInput.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapInfoColorText.addEventListener('input', function() {
+        bootstrapInfoColorInput.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapLightColorText.addEventListener('input', function() {
+        bootstrapLightColorInput.value = this.value;
+        updatePreview();
+    });
+
+    bootstrapDarkColorText.addEventListener('input', function() {
+        bootstrapDarkColorInput.value = this.value;
+        updatePreview();
+    });
+
     // Reset to default colors, font size, font family, and button settings
     resetButton.addEventListener('click', function() {
         primaryColorInput.value = '#0d6efd';
@@ -535,9 +814,31 @@ document.addEventListener('DOMContentLoaded', function() {
         buttonSizeInput.value = ''; // Default size
         buttonTypeInput.value = 'primary'; // Default type
 
+        // Reset bootstrap color override settings
+        overrideBootstrapColorsInput.checked = false;
+        bootstrapColorsSection.classList.add('d-none');
+        bootstrapPrimaryColorInput.value = '#0d6efd';
+        bootstrapSecondaryColorInput.value = '#6c757d';
+        bootstrapSuccessColorInput.value = '#198754';
+        bootstrapDangerColorInput.value = '#dc3545';
+        bootstrapWarningColorInput.value = '#ffc107';
+        bootstrapInfoColorInput.value = '#0dcaf0';
+        bootstrapLightColorInput.value = '#f8f9fa';
+        bootstrapDarkColorInput.value = '#212529';
+
         bgColorText.value = '#f8f9fa';
         cardBgColorText.value = '#ffffff';
         textColorText.value = '#212529';
+
+        // Reset bootstrap color override text inputs
+        bootstrapPrimaryColorText.value = '#0d6efd';
+        bootstrapSecondaryColorText.value = '#6c757d';
+        bootstrapSuccessColorText.value = '#198754';
+        bootstrapDangerColorText.value = '#dc3545';
+        bootstrapWarningColorText.value = '#ffc107';
+        bootstrapInfoColorText.value = '#0dcaf0';
+        bootstrapLightColorText.value = '#f8f9fa';
+        bootstrapDarkColorText.value = '#212529';
 
         updatePreview();
     });
@@ -563,7 +864,42 @@ document.addEventListener('DOMContentLoaded', function() {
         preview.style.color = textColorInput.value;
         preview.style.fontSize = fontSizeInput.value;
         preview.style.fontFamily = `'${fontFamilyInput.value}', sans-serif`;
-        previewNavbar.style.backgroundColor = primaryColorInput.value;
+
+        // Apply primary color to navbar (or override if bootstrap colors are overridden)
+        if (overrideBootstrapColorsInput.checked) {
+            // Create a style element for bootstrap color overrides in the preview
+            let previewStyleEl = document.getElementById('preview-bootstrap-overrides');
+            if (!previewStyleEl) {
+                previewStyleEl = document.createElement('style');
+                previewStyleEl.id = 'preview-bootstrap-overrides';
+                document.head.appendChild(previewStyleEl);
+            }
+
+            // Update the style element with the overridden bootstrap colors
+            previewStyleEl.textContent = `
+                .preview-navbar.bg-primary { background-color: ${bootstrapPrimaryColorInput.value} !important; }
+                .preview-navbar.bg-secondary { background-color: ${bootstrapSecondaryColorInput.value} !important; }
+                .preview-navbar.bg-success { background-color: ${bootstrapSuccessColorInput.value} !important; }
+                .preview-navbar.bg-danger { background-color: ${bootstrapDangerColorInput.value} !important; }
+                .preview-navbar.bg-warning { background-color: ${bootstrapWarningColorInput.value} !important; }
+                .preview-navbar.bg-info { background-color: ${bootstrapInfoColorInput.value} !important; }
+                .preview-navbar.bg-light { background-color: ${bootstrapLightColorInput.value} !important; }
+                .preview-navbar.bg-dark { background-color: ${bootstrapDarkColorInput.value} !important; }
+            `;
+
+            // Add bootstrap classes to the preview navbar for demonstration
+            previewNavbar.className = 'preview-navbar bg-primary';
+        } else {
+            // Remove the style element if bootstrap colors are not overridden
+            const previewStyleEl = document.getElementById('preview-bootstrap-overrides');
+            if (previewStyleEl) {
+                document.head.removeChild(previewStyleEl);
+            }
+
+            // Set the navbar background color directly
+            previewNavbar.style.backgroundColor = primaryColorInput.value;
+        }
+
         previewCard.style.backgroundColor = cardBgColorInput.value;
 
         // Update button size (padding)
@@ -586,86 +922,86 @@ document.addEventListener('DOMContentLoaded', function() {
             switch (colorType) {
                 case 'primary':
                     buttonBg = 'transparent';
-                    buttonText = primaryColorInput.value;
-                    buttonBorder = `1px solid ${primaryColorInput.value}`;
+                    buttonText = overrideBootstrapColorsInput.checked ? bootstrapPrimaryColorInput.value : primaryColorInput.value;
+                    buttonBorder = `1px solid ${overrideBootstrapColorsInput.checked ? bootstrapPrimaryColorInput.value : primaryColorInput.value}`;
                     break;
                 case 'secondary':
                     buttonBg = 'transparent';
-                    buttonText = '#6c757d';
-                    buttonBorder = '1px solid #6c757d';
+                    buttonText = overrideBootstrapColorsInput.checked ? bootstrapSecondaryColorInput.value : '#6c757d';
+                    buttonBorder = `1px solid ${overrideBootstrapColorsInput.checked ? bootstrapSecondaryColorInput.value : '#6c757d'}`;
                     break;
                 case 'success':
                     buttonBg = 'transparent';
-                    buttonText = '#198754';
-                    buttonBorder = '1px solid #198754';
+                    buttonText = overrideBootstrapColorsInput.checked ? bootstrapSuccessColorInput.value : '#198754';
+                    buttonBorder = `1px solid ${overrideBootstrapColorsInput.checked ? bootstrapSuccessColorInput.value : '#198754'}`;
                     break;
                 case 'danger':
                     buttonBg = 'transparent';
-                    buttonText = '#dc3545';
-                    buttonBorder = '1px solid #dc3545';
+                    buttonText = overrideBootstrapColorsInput.checked ? bootstrapDangerColorInput.value : '#dc3545';
+                    buttonBorder = `1px solid ${overrideBootstrapColorsInput.checked ? bootstrapDangerColorInput.value : '#dc3545'}`;
                     break;
                 case 'warning':
                     buttonBg = 'transparent';
-                    buttonText = '#ffc107';
-                    buttonBorder = '1px solid #ffc107';
+                    buttonText = overrideBootstrapColorsInput.checked ? bootstrapWarningColorInput.value : '#ffc107';
+                    buttonBorder = `1px solid ${overrideBootstrapColorsInput.checked ? bootstrapWarningColorInput.value : '#ffc107'}`;
                     break;
                 case 'info':
                     buttonBg = 'transparent';
-                    buttonText = '#0dcaf0';
-                    buttonBorder = '1px solid #0dcaf0';
+                    buttonText = overrideBootstrapColorsInput.checked ? bootstrapInfoColorInput.value : '#0dcaf0';
+                    buttonBorder = `1px solid ${overrideBootstrapColorsInput.checked ? bootstrapInfoColorInput.value : '#0dcaf0'}`;
                     break;
                 case 'light':
                     buttonBg = 'transparent';
-                    buttonText = '#f8f9fa';
-                    buttonBorder = '1px solid #f8f9fa';
+                    buttonText = overrideBootstrapColorsInput.checked ? bootstrapLightColorInput.value : '#f8f9fa';
+                    buttonBorder = `1px solid ${overrideBootstrapColorsInput.checked ? bootstrapLightColorInput.value : '#f8f9fa'}`;
                     break;
                 case 'dark':
                     buttonBg = 'transparent';
-                    buttonText = '#212529';
-                    buttonBorder = '1px solid #212529';
+                    buttonText = overrideBootstrapColorsInput.checked ? bootstrapDarkColorInput.value : '#212529';
+                    buttonBorder = `1px solid ${overrideBootstrapColorsInput.checked ? bootstrapDarkColorInput.value : '#212529'}`;
                     break;
                 default:
                     buttonBg = 'transparent';
-                    buttonText = primaryColorInput.value;
-                    buttonBorder = `1px solid ${primaryColorInput.value}`;
+                    buttonText = overrideBootstrapColorsInput.checked ? bootstrapPrimaryColorInput.value : primaryColorInput.value;
+                    buttonBorder = `1px solid ${overrideBootstrapColorsInput.checked ? bootstrapPrimaryColorInput.value : primaryColorInput.value}`;
             }
         } else {
             // Handle solid button types
             switch (buttonTypeInput.value) {
                 case 'primary':
-                    buttonBg = primaryColorInput.value;
+                    buttonBg = overrideBootstrapColorsInput.checked ? bootstrapPrimaryColorInput.value : primaryColorInput.value;
                     break;
                 case 'secondary':
-                    buttonBg = '#6c757d';
+                    buttonBg = overrideBootstrapColorsInput.checked ? bootstrapSecondaryColorInput.value : '#6c757d';
                     break;
                 case 'success':
-                    buttonBg = '#198754';
+                    buttonBg = overrideBootstrapColorsInput.checked ? bootstrapSuccessColorInput.value : '#198754';
                     break;
                 case 'danger':
-                    buttonBg = '#dc3545';
+                    buttonBg = overrideBootstrapColorsInput.checked ? bootstrapDangerColorInput.value : '#dc3545';
                     break;
                 case 'warning':
-                    buttonBg = '#ffc107';
+                    buttonBg = overrideBootstrapColorsInput.checked ? bootstrapWarningColorInput.value : '#ffc107';
                     buttonText = '#212529';
                     break;
                 case 'info':
-                    buttonBg = '#0dcaf0';
+                    buttonBg = overrideBootstrapColorsInput.checked ? bootstrapInfoColorInput.value : '#0dcaf0';
                     buttonText = '#212529';
                     break;
                 case 'light':
-                    buttonBg = '#f8f9fa';
+                    buttonBg = overrideBootstrapColorsInput.checked ? bootstrapLightColorInput.value : '#f8f9fa';
                     buttonText = '#212529';
                     break;
                 case 'dark':
-                    buttonBg = '#212529';
+                    buttonBg = overrideBootstrapColorsInput.checked ? bootstrapDarkColorInput.value : '#212529';
                     break;
                 case 'link':
                     buttonBg = 'transparent';
-                    buttonText = primaryColorInput.value;
+                    buttonText = overrideBootstrapColorsInput.checked ? bootstrapPrimaryColorInput.value : primaryColorInput.value;
                     buttonBorder = 'none';
                     break;
                 default:
-                    buttonBg = primaryColorInput.value;
+                    buttonBg = overrideBootstrapColorsInput.checked ? bootstrapPrimaryColorInput.value : primaryColorInput.value;
             }
         }
 

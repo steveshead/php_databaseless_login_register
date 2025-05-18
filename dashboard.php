@@ -16,10 +16,6 @@ if (!isset($_SESSION['username'])) {
                 <div class="card-body p-4">
                     <h1 class="card-title mb-4">Welcome to Your Dashboard, <?php echo isset($_SESSION['first_name']) ? htmlspecialchars($_SESSION['first_name']) : htmlspecialchars($_SESSION['username']); ?>!</h1>
 
-                    <div class="alert alert-success">
-                        <p class="mb-0">You are successfully logged in. This is your personal dashboard.</p>
-                    </div>
-
                     <div class="row mt-4">
                         <div class="col-md-6 mb-3">
                             <div class="card h-100">
