@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e890b773-002e-4a53-99f3-5ac7c78feb72" name="Changes" comment="Added README file and updated the index file">
+    <list default="true" id="e890b773-002e-4a53-99f3-5ac7c78feb72" name="Changes" comment="Updated README file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
@@ -97,7 +97,7 @@
       <workItem from="1747590822030" duration="8791000" />
       <workItem from="1747601356570" duration="922000" />
       <workItem from="1747602513365" duration="11404000" />
-      <workItem from="1747692241601" duration="1895000" />
+      <workItem from="1747692241601" duration="2059000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -171,7 +171,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747694282009</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Updated README file">
+      <option name="closed" value="true" />
+      <created>1747694510489</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1747694510489</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,6 +203,7 @@
     <MESSAGE value="Added user roles and cleaned up code" />
     <MESSAGE value="added default avatars for roles" />
     <MESSAGE value="Added README file and updated the index file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added README file and updated the index file" />
+    <MESSAGE value="Updated README file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated README file" />
   </component>
 </project>
