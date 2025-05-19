@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e890b773-002e-4a53-99f3-5ac7c78feb72" name="Changes" comment="Added user roles and cleaned up code">
+    <list default="true" id="e890b773-002e-4a53-99f3-5ac7c78feb72" name="Changes" comment="added default avatars for roles">
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +48,9 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="2xHN12bWeJWurom4DRZCVFXF9nb" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="autoscrollToSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -68,7 +73,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "editor.preferences.inline.completion",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -93,7 +98,7 @@
       <workItem from="1747590822030" duration="8791000" />
       <workItem from="1747601356570" duration="922000" />
       <workItem from="1747602513365" duration="11404000" />
-      <workItem from="1747692241601" duration="625000" />
+      <workItem from="1747692241601" duration="1660000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -151,7 +156,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747692123767</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="added default avatars for roles">
+      <option name="closed" value="true" />
+      <created>1747693403118</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1747693403118</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,6 +186,7 @@
     <MESSAGE value="Updated color schemes" />
     <MESSAGE value="Added color override functionality" />
     <MESSAGE value="Added user roles and cleaned up code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added user roles and cleaned up code" />
+    <MESSAGE value="added default avatars for roles" />
+    <option name="LAST_COMMIT_MESSAGE" value="added default avatars for roles" />
   </component>
 </project>
