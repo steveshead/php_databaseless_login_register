@@ -1,10 +1,24 @@
 <?php
 $page_title = "Site Settings - Login System";
-require_once 'header.php';
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Check if user is logged in
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
+    exit();
+}
+
+// Check if user has admin role
+$is_admin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+$readonly = !$is_admin;
+
+// Redirect non-admin users to dashboard
+if (!$is_admin) {
+    header("Location: dashboard.php");
     exit();
 }
 
@@ -19,6 +33,7 @@ $bg_color = '#f8f9fa'; // Bootstrap default light
 $card_bg_color = '#ffffff'; // White
 $text_color = '#212529'; // Bootstrap default dark
 $font_size = '16px'; // Default font size
+$font_size_percentage = '100%'; // Default font size percentage
 $font_family = 'Roboto'; // Default font family
 $button_size = ''; // Default button size (empty for default size)
 $button_type = 'primary'; // Default button type
@@ -64,175 +79,184 @@ $allowed_primary_colors = [
     '#212529' => 'Dark (Dark Gray)'
 ];
 
-// Get current user data from users.json
-$users_file = "users.json";
-$users = [];
-$current_user_index = -1;
+// Get global site settings from global_settings.json
+$global_settings_file = "global_settings.json";
+$global_settings = [];
 
-if (file_exists($users_file)) {
-    $users_json = file_get_contents($users_file);
-    $users = json_decode($users_json, true);
+if (file_exists($global_settings_file)) {
+    $global_settings_json = file_get_contents($global_settings_file);
+    $global_settings = json_decode($global_settings_json, true);
 
-    // Find the current user
-    foreach ($users as $index => $user) {
-        if ($user["username"] === $username) {
-            $current_user_index = $index;
+    // Get site settings if they exist
+    if (!empty($global_settings)) {
+        $primary_color = isset($global_settings["primary_color"]) ? $global_settings["primary_color"] : $primary_color;
+        $bg_color = isset($global_settings["bg_color"]) ? $global_settings["bg_color"] : $bg_color;
+        $card_bg_color = isset($global_settings["card_bg_color"]) ? $global_settings["card_bg_color"] : $card_bg_color;
+        $text_color = isset($global_settings["text_color"]) ? $global_settings["text_color"] : $text_color;
+        $font_size = isset($global_settings["font_size"]) ? $global_settings["font_size"] : $font_size;
+        $font_size_percentage = isset($global_settings["font_size_percentage"]) ? $global_settings["font_size_percentage"] : $font_size_percentage;
+        $font_family = isset($global_settings["font_family"]) ? $global_settings["font_family"] : $font_family;
+        $button_size = isset($global_settings["button_size"]) ? $global_settings["button_size"] : $button_size;
+        $button_type = isset($global_settings["button_type"]) ? $global_settings["button_type"] : $button_type;
 
-            // Get site settings if it exists
-            if (isset($user["site_settings"])) {
-                $primary_color = isset($user["site_settings"]["primary_color"]) ? $user["site_settings"]["primary_color"] : $primary_color;
-                $bg_color = isset($user["site_settings"]["bg_color"]) ? $user["site_settings"]["bg_color"] : $bg_color;
-                $card_bg_color = isset($user["site_settings"]["card_bg_color"]) ? $user["site_settings"]["card_bg_color"] : $card_bg_color;
-                $text_color = isset($user["site_settings"]["text_color"]) ? $user["site_settings"]["text_color"] : $text_color;
-                $font_size = isset($user["site_settings"]["font_size"]) ? $user["site_settings"]["font_size"] : $font_size;
-                $font_family = isset($user["site_settings"]["font_family"]) ? $user["site_settings"]["font_family"] : $font_family;
-                $button_size = isset($user["site_settings"]["button_size"]) ? $user["site_settings"]["button_size"] : $button_size;
-                $button_type = isset($user["site_settings"]["button_type"]) ? $user["site_settings"]["button_type"] : $button_type;
-
-                // Get bootstrap color override settings if they exist
-                $override_bootstrap_colors = isset($user["site_settings"]["override_bootstrap_colors"]) ? $user["site_settings"]["override_bootstrap_colors"] : $override_bootstrap_colors;
-                $bootstrap_primary_color = isset($user["site_settings"]["bootstrap_primary_color"]) ? $user["site_settings"]["bootstrap_primary_color"] : $bootstrap_primary_color;
-                $bootstrap_secondary_color = isset($user["site_settings"]["bootstrap_secondary_color"]) ? $user["site_settings"]["bootstrap_secondary_color"] : $bootstrap_secondary_color;
-                $bootstrap_success_color = isset($user["site_settings"]["bootstrap_success_color"]) ? $user["site_settings"]["bootstrap_success_color"] : $bootstrap_success_color;
-                $bootstrap_danger_color = isset($user["site_settings"]["bootstrap_danger_color"]) ? $user["site_settings"]["bootstrap_danger_color"] : $bootstrap_danger_color;
-                $bootstrap_warning_color = isset($user["site_settings"]["bootstrap_warning_color"]) ? $user["site_settings"]["bootstrap_warning_color"] : $bootstrap_warning_color;
-                $bootstrap_info_color = isset($user["site_settings"]["bootstrap_info_color"]) ? $user["site_settings"]["bootstrap_info_color"] : $bootstrap_info_color;
-                $bootstrap_light_color = isset($user["site_settings"]["bootstrap_light_color"]) ? $user["site_settings"]["bootstrap_light_color"] : $bootstrap_light_color;
-                $bootstrap_dark_color = isset($user["site_settings"]["bootstrap_dark_color"]) ? $user["site_settings"]["bootstrap_dark_color"] : $bootstrap_dark_color;
-            }
-            break;
-        }
+        // Get bootstrap color override settings if they exist
+        $override_bootstrap_colors = isset($global_settings["override_bootstrap_colors"]) ? $global_settings["override_bootstrap_colors"] : $override_bootstrap_colors;
+        $bootstrap_primary_color = isset($global_settings["bootstrap_primary_color"]) ? $global_settings["bootstrap_primary_color"] : $bootstrap_primary_color;
+        $bootstrap_secondary_color = isset($global_settings["bootstrap_secondary_color"]) ? $global_settings["bootstrap_secondary_color"] : $bootstrap_secondary_color;
+        $bootstrap_success_color = isset($global_settings["bootstrap_success_color"]) ? $global_settings["bootstrap_success_color"] : $bootstrap_success_color;
+        $bootstrap_danger_color = isset($global_settings["bootstrap_danger_color"]) ? $global_settings["bootstrap_danger_color"] : $bootstrap_danger_color;
+        $bootstrap_warning_color = isset($global_settings["bootstrap_warning_color"]) ? $global_settings["bootstrap_warning_color"] : $bootstrap_warning_color;
+        $bootstrap_info_color = isset($global_settings["bootstrap_info_color"]) ? $global_settings["bootstrap_info_color"] : $bootstrap_info_color;
+        $bootstrap_light_color = isset($global_settings["bootstrap_light_color"]) ? $global_settings["bootstrap_light_color"] : $bootstrap_light_color;
+        $bootstrap_dark_color = isset($global_settings["bootstrap_dark_color"]) ? $global_settings["bootstrap_dark_color"] : $bootstrap_dark_color;
     }
 }
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get form data
-    $new_primary_color = trim($_POST["primary_color"]);
-    $new_bg_color = trim($_POST["bg_color"]);
-    $new_card_bg_color = trim($_POST["card_bg_color"]);
-    $new_text_color = trim($_POST["text_color"]);
-    $new_font_size = trim($_POST["font_size"]);
-    $new_font_family = trim($_POST["font_family"]);
-    $new_button_size = trim($_POST["button_size"]);
-    $new_button_type = trim($_POST["button_type"]);
+    // Check if user is admin before processing form
+    if (!$is_admin) {
+        $error = "You do not have permission to change site settings. Only administrators can modify settings.";
+    } else {
+        // Get form data
+        $new_primary_color = trim($_POST["primary_color"]);
+        $new_bg_color = trim($_POST["bg_color"]);
+        $new_card_bg_color = trim($_POST["card_bg_color"]);
+        $new_text_color = trim($_POST["text_color"]);
+        $new_font_size = trim($_POST["font_size"]);
+        // Font size percentage is now a global setting
+        $new_font_family = trim($_POST["font_family"]);
+        $new_button_size = trim($_POST["button_size"]);
+        $new_button_type = trim($_POST["button_type"]);
 
-    // Get bootstrap color override data
-    $new_override_bootstrap_colors = isset($_POST["override_bootstrap_colors"]) ? true : false;
-    $new_bootstrap_primary_color = isset($_POST["bootstrap_primary_color"]) ? trim($_POST["bootstrap_primary_color"]) : $bootstrap_primary_color;
-    $new_bootstrap_secondary_color = isset($_POST["bootstrap_secondary_color"]) ? trim($_POST["bootstrap_secondary_color"]) : $bootstrap_secondary_color;
-    $new_bootstrap_success_color = isset($_POST["bootstrap_success_color"]) ? trim($_POST["bootstrap_success_color"]) : $bootstrap_success_color;
-    $new_bootstrap_danger_color = isset($_POST["bootstrap_danger_color"]) ? trim($_POST["bootstrap_danger_color"]) : $bootstrap_danger_color;
-    $new_bootstrap_warning_color = isset($_POST["bootstrap_warning_color"]) ? trim($_POST["bootstrap_warning_color"]) : $bootstrap_warning_color;
-    $new_bootstrap_info_color = isset($_POST["bootstrap_info_color"]) ? trim($_POST["bootstrap_info_color"]) : $bootstrap_info_color;
-    $new_bootstrap_light_color = isset($_POST["bootstrap_light_color"]) ? trim($_POST["bootstrap_light_color"]) : $bootstrap_light_color;
-    $new_bootstrap_dark_color = isset($_POST["bootstrap_dark_color"]) ? trim($_POST["bootstrap_dark_color"]) : $bootstrap_dark_color;
+        // Get global settings data
+        $new_global_font_size_percentage = trim($_POST["global_font_size_percentage"]);
 
-    // Validate input (basic validation for hex colors)
-    $color_pattern = '/^#[a-fA-F0-9]{6}$/';
+        // Get bootstrap color override data
+        $new_override_bootstrap_colors = isset($_POST["override_bootstrap_colors"]) ? true : false;
+        $new_bootstrap_primary_color = isset($_POST["bootstrap_primary_color"]) ? trim($_POST["bootstrap_primary_color"]) : $bootstrap_primary_color;
+        $new_bootstrap_secondary_color = isset($_POST["bootstrap_secondary_color"]) ? trim($_POST["bootstrap_secondary_color"]) : $bootstrap_secondary_color;
+        $new_bootstrap_success_color = isset($_POST["bootstrap_success_color"]) ? trim($_POST["bootstrap_success_color"]) : $bootstrap_success_color;
+        $new_bootstrap_danger_color = isset($_POST["bootstrap_danger_color"]) ? trim($_POST["bootstrap_danger_color"]) : $bootstrap_danger_color;
+        $new_bootstrap_warning_color = isset($_POST["bootstrap_warning_color"]) ? trim($_POST["bootstrap_warning_color"]) : $bootstrap_warning_color;
+        $new_bootstrap_info_color = isset($_POST["bootstrap_info_color"]) ? trim($_POST["bootstrap_info_color"]) : $bootstrap_info_color;
+        $new_bootstrap_light_color = isset($_POST["bootstrap_light_color"]) ? trim($_POST["bootstrap_light_color"]) : $bootstrap_light_color;
+        $new_bootstrap_dark_color = isset($_POST["bootstrap_dark_color"]) ? trim($_POST["bootstrap_dark_color"]) : $bootstrap_dark_color;
 
-    if (!array_key_exists($new_primary_color, $allowed_primary_colors)) {
-        $error = "Invalid primary color. Please select a valid Bootstrap 5 color.";
-    } elseif (!preg_match($color_pattern, $new_bg_color)) {
-        $error = "Invalid background color format. Use hex format (e.g., #f8f9fa).";
-    } elseif (!preg_match($color_pattern, $new_card_bg_color)) {
-        $error = "Invalid card background color format. Use hex format (e.g., #ffffff).";
-    } elseif (!preg_match($color_pattern, $new_text_color)) {
-        $error = "Invalid text color format. Use hex format (e.g., #212529).";
-    } elseif (!preg_match('/^\d+px$/', $new_font_size)) {
-        $error = "Invalid font size format. Use pixel format (e.g., 16px).";
-    } elseif (!in_array($new_font_family, $allowed_fonts)) {
-        $error = "Invalid font family selected.";
-    }
+        // Validate input (basic validation for hex colors)
+        $color_pattern = '/^#[a-fA-F0-9]{6}$/';
 
-    // Update user data if no errors
-    if (empty($error)) {
-        // Validate button settings
-        if (!in_array($new_button_size, $allowed_button_sizes)) {
-            $error = "Invalid button size selected.";
-        } elseif (!in_array($new_button_type, $allowed_button_types)) {
-            $error = "Invalid button type selected.";
+        if (!array_key_exists($new_primary_color, $allowed_primary_colors)) {
+            $error = "Invalid primary color. Please select a valid Bootstrap 5 color.";
+        } elseif (!preg_match($color_pattern, $new_bg_color)) {
+            $error = "Invalid background color format. Use hex format (e.g., #f8f9fa).";
+        } elseif (!preg_match($color_pattern, $new_card_bg_color)) {
+            $error = "Invalid card background color format. Use hex format (e.g., #ffffff).";
+        } elseif (!preg_match($color_pattern, $new_text_color)) {
+            $error = "Invalid text color format. Use hex format (e.g., #212529).";
+        } elseif (!preg_match('/^\d+px$/', $new_font_size)) {
+            $error = "Invalid font size format. Use pixel format (e.g., 16px).";
+        } elseif (!in_array($new_font_family, $allowed_fonts)) {
+            $error = "Invalid font family selected.";
         }
 
-        // Validate bootstrap color override settings if enabled
-        if ($new_override_bootstrap_colors) {
-            if (!preg_match($color_pattern, $new_bootstrap_primary_color)) {
-                $error = "Invalid primary color format. Use hex format (e.g., #0d6efd).";
-            } elseif (!preg_match($color_pattern, $new_bootstrap_secondary_color)) {
-                $error = "Invalid secondary color format. Use hex format (e.g., #6c757d).";
-            } elseif (!preg_match($color_pattern, $new_bootstrap_success_color)) {
-                $error = "Invalid success color format. Use hex format (e.g., #198754).";
-            } elseif (!preg_match($color_pattern, $new_bootstrap_danger_color)) {
-                $error = "Invalid danger color format. Use hex format (e.g., #dc3545).";
-            } elseif (!preg_match($color_pattern, $new_bootstrap_warning_color)) {
-                $error = "Invalid warning color format. Use hex format (e.g., #ffc107).";
-            } elseif (!preg_match($color_pattern, $new_bootstrap_info_color)) {
-                $error = "Invalid info color format. Use hex format (e.g., #0dcaf0).";
-            } elseif (!preg_match($color_pattern, $new_bootstrap_light_color)) {
-                $error = "Invalid light color format. Use hex format (e.g., #f8f9fa).";
-            } elseif (!preg_match($color_pattern, $new_bootstrap_dark_color)) {
-                $error = "Invalid dark color format. Use hex format (e.g., #212529).";
+        // Validate global font size percentage
+        if (isset($new_global_font_size_percentage) && !preg_match('/^\d+%$/', $new_global_font_size_percentage)) {
+            $error = "Invalid global font size percentage format. Use percentage format (e.g., 100%).";
+        }
+
+        // Update user data if no errors
+        if (empty($error)) {
+            // Validate button settings
+            if (!in_array($new_button_size, $allowed_button_sizes)) {
+                $error = "Invalid button size selected.";
+            } elseif (!in_array($new_button_type, $allowed_button_types)) {
+                $error = "Invalid button type selected.";
             }
-        }
 
-        // Create or update site settings
-        $site_settings = [
-            "primary_color" => $new_primary_color,
-            "bg_color" => $new_bg_color,
-            "card_bg_color" => $new_card_bg_color,
-            "text_color" => $new_text_color,
-            "font_size" => $new_font_size,
-            "font_family" => $new_font_family,
-            "button_size" => $new_button_size,
-            "button_type" => $new_button_type,
-            "override_bootstrap_colors" => $new_override_bootstrap_colors,
-            "bootstrap_primary_color" => $new_bootstrap_primary_color,
-            "bootstrap_secondary_color" => $new_bootstrap_secondary_color,
-            "bootstrap_success_color" => $new_bootstrap_success_color,
-            "bootstrap_danger_color" => $new_bootstrap_danger_color,
-            "bootstrap_warning_color" => $new_bootstrap_warning_color,
-            "bootstrap_info_color" => $new_bootstrap_info_color,
-            "bootstrap_light_color" => $new_bootstrap_light_color,
-            "bootstrap_dark_color" => $new_bootstrap_dark_color
-        ];
+            // Validate bootstrap color override settings if enabled
+            if ($new_override_bootstrap_colors) {
+                if (!preg_match($color_pattern, $new_bootstrap_primary_color)) {
+                    $error = "Invalid primary color format. Use hex format (e.g., #0d6efd).";
+                } elseif (!preg_match($color_pattern, $new_bootstrap_secondary_color)) {
+                    $error = "Invalid secondary color format. Use hex format (e.g., #6c757d).";
+                } elseif (!preg_match($color_pattern, $new_bootstrap_success_color)) {
+                    $error = "Invalid success color format. Use hex format (e.g., #198754).";
+                } elseif (!preg_match($color_pattern, $new_bootstrap_danger_color)) {
+                    $error = "Invalid danger color format. Use hex format (e.g., #dc3545).";
+                } elseif (!preg_match($color_pattern, $new_bootstrap_warning_color)) {
+                    $error = "Invalid warning color format. Use hex format (e.g., #ffc107).";
+                } elseif (!preg_match($color_pattern, $new_bootstrap_info_color)) {
+                    $error = "Invalid info color format. Use hex format (e.g., #0dcaf0).";
+                } elseif (!preg_match($color_pattern, $new_bootstrap_light_color)) {
+                    $error = "Invalid light color format. Use hex format (e.g., #f8f9fa).";
+                } elseif (!preg_match($color_pattern, $new_bootstrap_dark_color)) {
+                    $error = "Invalid dark color format. Use hex format (e.g., #212529).";
+                }
+            }
 
-        // Update user in array
-        $users[$current_user_index]["site_settings"] = $site_settings;
+            // Create or update site settings
+            $site_settings = [
+                "primary_color" => $new_primary_color,
+                "bg_color" => $new_bg_color,
+                "card_bg_color" => $new_card_bg_color,
+                "text_color" => $new_text_color,
+                "font_size" => $new_font_size,
+                "font_family" => $new_font_family,
+                "button_size" => $new_button_size,
+                "button_type" => $new_button_type,
+                "override_bootstrap_colors" => $new_override_bootstrap_colors,
+                "bootstrap_primary_color" => $new_bootstrap_primary_color,
+                "bootstrap_secondary_color" => $new_bootstrap_secondary_color,
+                "bootstrap_success_color" => $new_bootstrap_success_color,
+                "bootstrap_danger_color" => $new_bootstrap_danger_color,
+                "bootstrap_warning_color" => $new_bootstrap_warning_color,
+                "bootstrap_info_color" => $new_bootstrap_info_color,
+                "bootstrap_light_color" => $new_bootstrap_light_color,
+                "bootstrap_dark_color" => $new_bootstrap_dark_color,
+                "font_size_percentage" => $new_global_font_size_percentage // Include font size percentage in global settings
+            ];
 
-        // Save to file
-        if (file_put_contents($users_file, json_encode($users, JSON_PRETTY_PRINT))) {
-            // Update session variables
-            $_SESSION["site_settings"] = $site_settings;
+            // Save to global settings file
+            $global_settings_file = "global_settings.json";
+            if (file_put_contents($global_settings_file, json_encode($site_settings, JSON_PRETTY_PRINT))) {
+                // Update session variables
+                $_SESSION["site_settings"] = $site_settings;
 
-            // Update local variables
-            $primary_color = $new_primary_color;
-            $bg_color = $new_bg_color;
-            $card_bg_color = $new_card_bg_color;
-            $text_color = $new_text_color;
-            $font_size = $new_font_size;
-            $font_family = $new_font_family;
-            $button_size = $new_button_size;
-            $button_type = $new_button_type;
-            $override_bootstrap_colors = $new_override_bootstrap_colors;
-            $bootstrap_primary_color = $new_bootstrap_primary_color;
-            $bootstrap_secondary_color = $new_bootstrap_secondary_color;
-            $bootstrap_success_color = $new_bootstrap_success_color;
-            $bootstrap_danger_color = $new_bootstrap_danger_color;
-            $bootstrap_warning_color = $new_bootstrap_warning_color;
-            $bootstrap_info_color = $new_bootstrap_info_color;
-            $bootstrap_light_color = $new_bootstrap_light_color;
-            $bootstrap_dark_color = $new_bootstrap_dark_color;
+                // Update local variables
+                $primary_color = $new_primary_color;
+                $bg_color = $new_bg_color;
+                $card_bg_color = $new_card_bg_color;
+                $text_color = $new_text_color;
+                $font_size = $new_font_size;
+                $font_size_percentage = null; // Font size percentage is now a global setting
+                $font_family = $new_font_family;
+                $button_size = $new_button_size;
+                $button_type = $new_button_type;
+                $override_bootstrap_colors = $new_override_bootstrap_colors;
+                $bootstrap_primary_color = $new_bootstrap_primary_color;
+                $bootstrap_secondary_color = $new_bootstrap_secondary_color;
+                $bootstrap_success_color = $new_bootstrap_success_color;
+                $bootstrap_danger_color = $new_bootstrap_danger_color;
+                $bootstrap_warning_color = $new_bootstrap_warning_color;
+                $bootstrap_info_color = $new_bootstrap_info_color;
+                $bootstrap_light_color = $new_bootstrap_light_color;
+                $bootstrap_dark_color = $new_bootstrap_dark_color;
 
-            // Set success flag for display
-            $success_message = "Site settings updated successfully!";
-        } else {
-            $error = "Failed to save site settings changes";
+                // Set success flag for display
+                $success_message = "Site settings updated successfully!";
+            } else {
+                $error = "Failed to save site settings changes";
+            }
         }
     }
 }
 
+// Include header after form processing
+require_once 'header.php';
+
 // Function to generate site settings preview
-function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family, $button_size = '', $button_type = 'primary', $override_bootstrap_colors = false, $bootstrap_primary = '#0d6efd', $bootstrap_secondary = '#6c757d', $bootstrap_success = '#198754', $bootstrap_danger = '#dc3545', $bootstrap_warning = '#ffc107', $bootstrap_info = '#0dcaf0', $bootstrap_light = '#f8f9fa', $bootstrap_dark = '#212529') {
+function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family, $button_size = '', $button_type = 'primary', $override_bootstrap_colors = false, $bootstrap_primary = '#0d6efd', $bootstrap_secondary = '#6c757d', $bootstrap_success = '#198754', $bootstrap_danger = '#dc3545', $bootstrap_warning = '#ffc107', $bootstrap_info = '#0dcaf0', $bootstrap_light = '#f8f9fa', $bootstrap_dark = '#212529', $font_size_percentage = '100%') {
     // Determine button padding based on size
     $button_padding = '5px 10px'; // Default
     if ($button_size === 'sm') {
@@ -352,6 +376,9 @@ function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family,
     }
 
     return $bootstrap_vars . "
+        .site-preview-container {
+            font-size: {$font_size_percentage};
+        }
         .site-preview {
             padding: 15px;
             border-radius: 5px;
@@ -404,6 +431,10 @@ function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family,
                 <div class="card-body p-4">
                     <h1 class="card-title mb-4">Site Settings</h1>
 
+                    <?php if (!$is_admin): ?>
+                        <div class="alert alert-warning">You are viewing site settings in read-only mode. Only administrators can modify these settings.</div>
+                    <?php endif; ?>
+
                     <?php if (!empty($error)): ?>
                         <div class="alert alert-danger"><?php echo $error; ?></div>
                     <?php endif; ?>
@@ -414,16 +445,18 @@ function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family,
 
                     <!-- Site Settings Preview -->
                     <style>
-                        <?php echo generatePreviewCSS($primary_color, $bg_color, $card_bg_color, $text_color, $font_size, $font_family, $button_size, $button_type, $override_bootstrap_colors, $bootstrap_primary_color, $bootstrap_secondary_color, $bootstrap_success_color, $bootstrap_danger_color, $bootstrap_warning_color, $bootstrap_info_color, $bootstrap_light_color, $bootstrap_dark_color); ?>
+                        <?php echo generatePreviewCSS($primary_color, $bg_color, $card_bg_color, $text_color, $font_size, $font_family, $button_size, $button_type, $override_bootstrap_colors, $bootstrap_primary_color, $bootstrap_secondary_color, $bootstrap_success_color, $bootstrap_danger_color, $bootstrap_warning_color, $bootstrap_info_color, $bootstrap_light_color, $bootstrap_dark_color, $font_size_percentage); ?>
                     </style>
 
                     <h5 class="mb-3">Preview:</h5>
-                    <div class="site-preview">
-                        <div class="preview-navbar">Navigation Bar</div>
-                        <div class="preview-card">
-                            <h5>Card Title</h5>
-                            <p>This is how your content will look with the selected site settings.</p>
-                            <div class="preview-button">Button</div>
+                    <div class="site-preview-container">
+                        <div class="site-preview">
+                            <div class="preview-navbar">Navigation Bar</div>
+                            <div class="preview-card">
+                                <h5>Card Title</h5>
+                                <p>This is how your content will look with the selected site settings.</p>
+                                <div class="preview-button">Button</div>
+                            </div>
                         </div>
                     </div>
 
@@ -489,6 +522,8 @@ function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family,
                                 <div class="form-text">Choose from Google Fonts</div>
                             </div>
                         </div>
+
+                        <!-- Font Size Percentage is now a global setting -->
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -605,9 +640,25 @@ function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family,
                             <button type="button" class="btn btn-secondary" id="reset_colors">Reset to Defaults</button>
                         </div>
 
+                        <h5 class="mt-4 mb-3">Global Settings</h5>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="global_font_size_percentage" class="form-label">Global Font Size Percentage</label>
+                                <div class="input-group">
+                                    <?php
+                                    // Load global settings
+                                    $global_settings = json_decode(file_get_contents('global_settings.json'), true);
+                                    $global_font_size_percentage = isset($global_settings['font_size_percentage']) ? $global_settings['font_size_percentage'] : '100%';
+                                    ?>
+                                    <input type="text" class="form-control" id="global_font_size_percentage" name="global_font_size_percentage" value="<?php echo htmlspecialchars($global_font_size_percentage); ?>" title="Choose global font size percentage">
+                                </div>
+                                <div class="form-text">Adjust global font size by percentage for all users (e.g., 100% for default, 120% for larger, 80% for smaller)</div>
+                            </div>
+                        </div>
+
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a href="dashboard.php" class="btn btn-secondary me-md-2">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="submit" class="btn btn-primary" <?php echo $readonly ? 'disabled' : ''; ?>>Save Changes</button>
                         </div>
                     </form>
                 </div>
@@ -624,6 +675,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cardBgColorInput = document.getElementById('card_bg_color');
     const textColorInput = document.getElementById('text_color');
     const fontSizeInput = document.getElementById('font_size');
+    const globalFontSizePercentageInput = document.getElementById('global_font_size_percentage');
     const fontFamilyInput = document.getElementById('font_family');
     const buttonSizeInput = document.getElementById('button_size');
     const buttonTypeInput = document.getElementById('button_type');
@@ -681,6 +733,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update preview when font size changes
     fontSizeInput.addEventListener('input', function() {
+        updatePreview();
+    });
+
+    // Update preview when global font size percentage changes
+    globalFontSizePercentageInput.addEventListener('input', function() {
         updatePreview();
     });
 
@@ -810,6 +867,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cardBgColorInput.value = '#ffffff';
         textColorInput.value = '#212529';
         fontSizeInput.value = '16px';
+        globalFontSizePercentageInput.value = '100%';
         fontFamilyInput.value = 'Roboto';
         buttonSizeInput.value = ''; // Default size
         buttonTypeInput.value = 'primary'; // Default type
@@ -841,9 +899,13 @@ document.addEventListener('DOMContentLoaded', function() {
         bootstrapDarkColorText.value = '#212529';
 
         updatePreview();
+
+        // Submit the form to save the changes
+        document.querySelector('form').submit();
     });
 
     function updatePreview() {
+        const previewContainer = document.querySelector('.site-preview-container');
         const preview = document.querySelector('.site-preview');
         const previewNavbar = document.querySelector('.preview-navbar');
         const previewCard = document.querySelector('.preview-card');
@@ -859,6 +921,8 @@ document.addEventListener('DOMContentLoaded', function() {
         link.rel = 'stylesheet';
         link.href = `https://fonts.googleapis.com/css2?family=${fontFamilyInput.value.replace(/ /g, '+')}&display=swap`;
         document.head.appendChild(link);
+
+        previewContainer.style.fontSize = globalFontSizePercentageInput.value;
 
         preview.style.backgroundColor = bgColorInput.value;
         preview.style.color = textColorInput.value;
@@ -889,6 +953,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Add bootstrap classes to the preview navbar for demonstration
             previewNavbar.className = 'preview-navbar bg-primary';
+            // Set the navbar background color directly to ensure it updates
+            previewNavbar.style.backgroundColor = bootstrapPrimaryColorInput.value;
+
+            // Force a repaint to ensure the navbar updates
+            previewNavbar.style.display = 'none';
+            previewNavbar.offsetHeight; // Trigger a reflow
+            previewNavbar.style.display = 'block';
         } else {
             // Remove the style element if bootstrap colors are not overridden
             const previewStyleEl = document.getElementById('preview-bootstrap-overrides');
@@ -898,9 +969,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Set the navbar background color directly
             previewNavbar.style.backgroundColor = primaryColorInput.value;
+
+            // Force a repaint to ensure the navbar updates
+            previewNavbar.style.display = 'none';
+            previewNavbar.offsetHeight; // Trigger a reflow
+            previewNavbar.style.display = 'block';
         }
 
         previewCard.style.backgroundColor = cardBgColorInput.value;
+
+        // Force a repaint to ensure the card updates
+        previewCard.style.display = 'none';
+        previewCard.offsetHeight; // Trigger a reflow
+        previewCard.style.display = 'block';
 
         // Update button size (padding)
         let buttonPadding = '5px 10px'; // Default
@@ -1008,8 +1089,14 @@ document.addEventListener('DOMContentLoaded', function() {
         previewButton.style.backgroundColor = buttonBg;
         previewButton.style.color = buttonText;
         previewButton.style.border = buttonBorder;
+
+        // Force a repaint to ensure the button updates
+        previewButton.style.display = 'none';
+        previewButton.offsetHeight; // Trigger a reflow
+        previewButton.style.display = 'inline-block';
     }
 });
 </script>
 
 <?php require_once 'footer.php'; ?>
+}

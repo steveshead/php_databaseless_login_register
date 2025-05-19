@@ -40,6 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION["username"] = $username;
                         $_SESSION["email"] = $user["email"];
 
+                        // Set user role (default to "user" if not specified)
+                        $_SESSION["role"] = isset($user["role"]) ? $user["role"] : "user";
+
                         // Set first name and last name if they exist
                         if (isset($user["first_name"])) {
                             $_SESSION["first_name"] = $user["first_name"];
@@ -51,6 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // Set profile picture if it exists
                         if (isset($user["profile_picture"])) {
                             $_SESSION["profile_picture"] = $user["profile_picture"];
+                        } else {
+                            // Set default profile picture based on role
+                            if ($_SESSION["role"] === "admin") {
+                                $_SESSION["profile_picture"] = "uploads/profile_pictures/default_admin.png";
+                            } else {
+                                $_SESSION["profile_picture"] = "uploads/profile_pictures/default_user.png";
+                            }
                         }
 
                         // Set site settings if it exists

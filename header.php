@@ -10,18 +10,26 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <title><?php echo isset($page_title) ? $page_title : 'Login System'; ?></title>
     <!-- Bootstrap 5.3.6 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <?php if (isset($_SESSION['site_settings']) && isset($_SESSION['site_settings']['font_family'])): ?>
-    <link href="https://fonts.googleapis.com/css2?family=<?php echo str_replace(' ', '+', $_SESSION['site_settings']['font_family']); ?>&display=swap" rel="stylesheet">
-    <?php else: ?>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <?php endif; ?>
+    <!-- Google Fonts and Custom Styles -->
+    <?php
+    // Load global site settings
+    $global_settings_file = "global_settings.json";
+    $scheme = [];
+    $font_family = 'Roboto'; // Default font
+
+    if (file_exists($global_settings_file)) {
+        $scheme = json_decode(file_get_contents($global_settings_file), true);
+        if (isset($scheme['font_family'])) {
+            $font_family = $scheme['font_family'];
+        }
+    }
+    ?>
+    <link href="https://fonts.googleapis.com/css2?family=<?php echo str_replace(' ', '+', $font_family); ?>&display=swap" rel="stylesheet">
     <!-- Custom styles -->
     <link rel="stylesheet" href="style.css">
     <?php
-    // Apply user's site settings if available
-    if (isset($_SESSION['site_settings'])) {
-        $scheme = $_SESSION['site_settings'];
+    // Apply global site settings
+    if (!empty($scheme)) {
         echo '<style>';
         echo ':root {';
         if (isset($scheme['primary_color'])) {
@@ -79,8 +87,18 @@ $current_page = basename($_SERVER['PHP_SELF']);
             echo 'body { color: ' . $scheme['text_color'] . ' !important; }';
         }
 
+        // Apply global font size percentage
+        if (isset($scheme['font_size_percentage'])) {
+            echo 'html { font-size: ' . $scheme['font_size_percentage'] . ' !important; }';
+        }
+
+        // Convert px font size to rem for better scaling with font size percentage
         if (isset($scheme['font_size'])) {
-            echo 'body { font-size: ' . $scheme['font_size'] . ' !important; }';
+            // Extract the numeric value from the font size (e.g., "16px" -> 16)
+            $font_size_px = intval($scheme['font_size']);
+            // Convert to rem (assuming 16px base font size)
+            $font_size_rem = ($font_size_px / 16) . 'rem';
+            echo 'body { font-size: ' . $font_size_rem . ' !important; }';
         }
 
         if (isset($scheme['font_family'])) {
@@ -152,7 +170,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         // Apply button size if set
         if (isset($scheme['button_size']) && !empty($scheme['button_size'])) {
             $size_class = 'btn-' . $scheme['button_size'];
-            echo '.btn:not(.btn-sm):not(.btn-lg) { ';
+            echo '.btn { ';
             if ($scheme['button_size'] === 'sm') {
                 echo 'padding: 0.25rem 0.5rem !important; font-size: 0.875rem !important; border-radius: 0.25rem !important;';
             } elseif ($scheme['button_size'] === 'lg') {

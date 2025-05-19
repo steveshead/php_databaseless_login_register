@@ -89,8 +89,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $upload_path = $upload_dir . $file_name;
 
             if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $upload_path)) {
-                // Delete old profile picture if it exists
-                if (!empty($profile_picture) && file_exists($profile_picture)) {
+                // Delete old profile picture if it exists and is not a default profile picture
+                if (!empty($profile_picture) && file_exists($profile_picture) && 
+                    $profile_picture !== "uploads/profile_pictures/default_user.png" && 
+                    $profile_picture !== "uploads/profile_pictures/default_admin.png") {
                     unlink($profile_picture);
                 }
 

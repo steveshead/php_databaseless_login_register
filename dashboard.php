@@ -31,6 +31,7 @@ if (!isset($_SESSION['username'])) {
                                         <p class="card-text">Name: <?php echo htmlspecialchars($_SESSION['first_name']) . ' ' . htmlspecialchars($_SESSION['last_name']); ?></p>
                                     <?php endif; ?>
                                     <p class="card-text">Email: <?php echo htmlspecialchars($_SESSION['email']); ?></p>
+                                    <p class="card-text">Role: <span class="badge <?php echo isset($_SESSION['role']) && $_SESSION['role'] === 'admin' ? 'bg-danger' : 'bg-primary'; ?>"><?php echo isset($_SESSION['role']) ? ucfirst(htmlspecialchars($_SESSION['role'])) : 'User'; ?></span></p>
                                 </div>
                             </div>
                         </div>
@@ -40,7 +41,9 @@ if (!isset($_SESSION['username'])) {
                                     <h5 class="card-title">Quick Actions</h5>
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item"><a href="edit_profile.php" class="text-decoration-none">Edit Profile</a></li>
+                                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                                         <li class="list-group-item"><a href="site_settings.php" class="text-decoration-none">Site Settings</a></li>
+                                        <?php endif; ?>
                                         <li class="list-group-item"><a href="change_password.php" class="text-decoration-none">Change Password</a></li>
                                         <li class="list-group-item"><a href="logout.php" class="text-decoration-none text-danger">Logout</a></li>
                                     </ul>

@@ -1,29 +1,36 @@
 [
     {
-        "username": "steveshead",
-        "email": "steve@steve-shead.com",
-        "password": "$2y$10$ZXp.mkwFq6ACw3CCQkv0Ve46I0RZT\/Rrr\/yV6UF\/8h70P0gYKn2tK",
-        "profile_picture": "uploads\/profile_pictures\/steveshead_1747592808.jpg",
+        "username": "Admin",
+        "email": "admin@youremail.com",
+        "first_name": "Admin",
+        "last_name": "User",
+        "password": "$2y$10$LeS.OzypXrdHpJmHt8zlr.MYhLykeSZ0Tl\/NJy6QFnAqiaUDItzY2",
+        "role": "admin",
+        "profile_picture": "uploads\/profile_pictures\/default_admin.png",
         "site_settings": {
             "primary_color": "#0d6efd",
             "bg_color": "#f8f9fa",
             "card_bg_color": "#ffffff",
             "text_color": "#212529",
             "font_size": "16px",
-            "font_family": "Quicksand",
-            "button_size": "sm",
-            "button_type": "primary",
-            "override_bootstrap_colors": false,
-            "bootstrap_primary_color": "#0d89fd",
-            "bootstrap_secondary_color": "#6c757d",
-            "bootstrap_success_color": "#198754",
-            "bootstrap_danger_color": "#dc3545",
-            "bootstrap_warning_color": "#ffc107",
-            "bootstrap_info_color": "#0dcaf0",
-            "bootstrap_light_color": "#f8f9fa",
-            "bootstrap_dark_color": "#212529"
-        },
-        "first_name": "Steve",
-        "last_name": "Shead"
+            "font_family": "Roboto"
+        }
+    },
+    {
+        "username": "User",
+        "email": "user@youremail.com",
+        "first_name": "Default",
+        "last_name": "User",
+        "password": "$2y$10$SCVlPIIJuWhjbgibpOxOCunhCOv7yp..miyZT2v\/SxuhQnM1CVsli",
+        "role": "user",
+        "profile_picture": "uploads\/profile_pictures\/default_user.png",
+        "site_settings": {
+            "primary_color": "#0d6efd",
+            "bg_color": "#f8f9fa",
+            "card_bg_color": "#ffffff",
+            "text_color": "#212529",
+            "font_size": "16px",
+            "font_family": "Roboto"
+        }
     }
 ]

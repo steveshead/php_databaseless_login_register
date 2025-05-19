@@ -71,6 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 "first_name" => $first_name,
                 "last_name" => $last_name,
                 "password" => $hashed_password,
+                "role" => "user",
+                "profile_picture" => "uploads/profile_pictures/default_user.png", // Default profile picture for user role
                 "site_settings" => [
                     "primary_color" => "#0d6efd",
                     "bg_color" => "#f8f9fa",
