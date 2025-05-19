@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e890b773-002e-4a53-99f3-5ac7c78feb72" name="Changes" comment="added default avatars for roles">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    <list default="true" id="e890b773-002e-4a53-99f3-5ac7c78feb72" name="Changes" comment="Added README file and updated the index file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +97,7 @@
       <workItem from="1747590822030" duration="8791000" />
       <workItem from="1747601356570" duration="922000" />
       <workItem from="1747602513365" duration="11404000" />
-      <workItem from="1747692241601" duration="1660000" />
+      <workItem from="1747692241601" duration="1895000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -164,7 +163,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747693403118</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added README file and updated the index file">
+      <option name="closed" value="true" />
+      <created>1747694282009</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1747694282009</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -187,6 +194,7 @@
     <MESSAGE value="Added color override functionality" />
     <MESSAGE value="Added user roles and cleaned up code" />
     <MESSAGE value="added default avatars for roles" />
-    <option name="LAST_COMMIT_MESSAGE" value="added default avatars for roles" />
+    <MESSAGE value="Added README file and updated the index file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added README file and updated the index file" />
   </component>
 </project>
