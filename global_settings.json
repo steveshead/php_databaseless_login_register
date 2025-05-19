@@ -1,0 +1,20 @@
+{
+    "primary_color": "#0d6efd",
+    "bg_color": "#f8f9fa",
+    "card_bg_color": "#ffffff",
+    "text_color": "#212529",
+    "font_size": "16px",
+    "font_family": "Quicksand",
+    "button_size": "sm",
+    "button_type": "primary",
+    "override_bootstrap_colors": false,
+    "bootstrap_primary_color": "#0d6efd",
+    "bootstrap_secondary_color": "#6c757d",
+    "bootstrap_success_color": "#198754",
+    "bootstrap_danger_color": "#dc3545",
+    "bootstrap_warning_color": "#ffc107",
+    "bootstrap_info_color": "#0dcaf0",
+    "bootstrap_light_color": "#f8f9fa",
+    "bootstrap_dark_color": "#212529",
+    "font_size_percentage": "100%"
+}

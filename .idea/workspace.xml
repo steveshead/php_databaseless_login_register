@@ -4,18 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e890b773-002e-4a53-99f3-5ac7c78feb72" name="Changes" comment="Added color override functionality">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+    <list default="true" id="e890b773-002e-4a53-99f3-5ac7c78feb72" name="Changes" comment="Added user roles and cleaned up code">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_profile.php" beforeDir="false" afterPath="$PROJECT_DIR$/edit_profile.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/register.php" beforeDir="false" afterPath="$PROJECT_DIR$/register.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_settings.php" beforeDir="false" afterPath="$PROJECT_DIR$/site_settings.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/profile_pictures/steveshead_1747592808.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/users.json" beforeDir="false" afterPath="$PROJECT_DIR$/users.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,12 +34,13 @@
     &quot;assignee&quot;: &quot;steveshead&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/steveshead/php_databaseless_login_register.git",
-    "accountId": "0559d4e7-c4f9-463b-bd59-ab71a5cc0ff2"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/steveshead/php_databaseless_login_register.git&quot;,
+    &quot;accountId&quot;: &quot;0559d4e7-c4f9-463b-bd59-ab71a5cc0ff2&quot;
   }
-}]]></component>
+}</component>
+  <component name="PhpDebugGeneral" listening_started="true" />
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/usr/local/Cellar/php@7.4/7.4.33_1/bin/php" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -77,7 +68,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.inline.completion",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -101,7 +92,8 @@
       <updated>1747590821009</updated>
       <workItem from="1747590822030" duration="8791000" />
       <workItem from="1747601356570" duration="922000" />
-      <workItem from="1747602513365" duration="10957000" />
+      <workItem from="1747602513365" duration="11404000" />
+      <workItem from="1747692241601" duration="625000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -151,7 +143,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747607875174</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added user roles and cleaned up code">
+      <option name="closed" value="true" />
+      <created>1747692123767</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1747692123767</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -172,6 +172,7 @@
     <MESSAGE value="Initial Commit" />
     <MESSAGE value="Updated color schemes" />
     <MESSAGE value="Added color override functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added color override functionality" />
+    <MESSAGE value="Added user roles and cleaned up code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added user roles and cleaned up code" />
   </component>
 </project>
