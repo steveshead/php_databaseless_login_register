@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e890b773-002e-4a53-99f3-5ac7c78feb72" name="Changes" comment="Updated README file">
+      <change afterPath="$PROJECT_DIR$/forms.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/global_settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/global_settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/global_settings.php" beforeDir="false" afterPath="$PROJECT_DIR$/global_settings.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +75,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.inline.completion",
+    "settings.editor.selected.configurable": "ml.llm.LLMThirdPartyAiProvidersConfigurable",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -99,7 +100,9 @@
       <workItem from="1747590822030" duration="8791000" />
       <workItem from="1747601356570" duration="922000" />
       <workItem from="1747602513365" duration="11404000" />
-      <workItem from="1747692241601" duration="2476000" />
+      <workItem from="1747692241601" duration="3292000" />
+      <workItem from="1747780290360" duration="1017000" />
+      <workItem from="1747946071511" duration="632000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -189,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747694648599</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Updated README file">
+      <option name="closed" value="true" />
+      <created>1747695092594</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1747695092594</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,5 +226,9 @@
     <MESSAGE value="Added README file and updated the index file" />
     <MESSAGE value="Updated README file" />
     <option name="LAST_COMMIT_MESSAGE" value="Updated README file" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

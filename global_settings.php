@@ -1,9 +1,12 @@
 <?php
 $page_title = "Global Settings - Login System";
 
+require_once 'forms.php';
+
 // Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+    session_set_timeout(86400);
 }
 
 // Check if user is logged in
@@ -74,6 +77,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+// CSRF token
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Validate input data
+    $error = '';
+    if (!validate_font_size_percentage(trim($_POST["font_size_percentage"]))) {
+        $error = 'Invalid font size percentage format. Use percentage format (e.g., 100%).';
+    }
+
+    // Update global settings if no errors
+    if (empty($error)) {
+        // ... (rest of the code remains the same)
+    }
+}
+
 // Include header after form processing
 require_once 'header.php';
 ?>
@@ -118,5 +138,12 @@ require_once 'header.php';
         </div>
     </div>
 </div>
+
+<form action="global_settings.php" method="post">
+    <!-- ... -->
+    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+    <!-- ... -->
+</form>
+
 
 <?php require_once 'footer.php'; ?>
