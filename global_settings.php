@@ -1,6 +1,5 @@
 <?php
 $page_title = "Global Settings - Login System";
-
 require_once 'forms.php';
 
 // Start session if not already started

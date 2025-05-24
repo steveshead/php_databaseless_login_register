@@ -15,7 +15,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     // Load global site settings
     $global_settings_file = "global_settings.json";
     $scheme = [];
-    $font_family = 'Roboto'; // Default font
+    $font_family = 'Quicksand'; // Default font
 
     if (file_exists($global_settings_file)) {
         $scheme = json_decode(file_get_contents($global_settings_file), true);
@@ -314,6 +314,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <?php if (isset($_SESSION['username'])): ?>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo $current_page == 'dashboard.php' ? 'active' : ''; ?>" href="dashboard.php">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo $current_page == 'secret.php' ? 'active' : ''; ?>" href="secret.php">Secret</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="logout.php">Logout</a>

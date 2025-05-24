@@ -1,10 +1,8 @@
 <?php
 $page_title = "Site Settings - Login System";
 
-// Start session if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Include header after form processing
+require_once 'header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['username'])) {
@@ -34,7 +32,7 @@ $card_bg_color = '#ffffff'; // White
 $text_color = '#212529'; // Bootstrap default dark
 $font_size = '16px'; // Default font size
 $font_size_percentage = '100%'; // Default font size percentage
-$font_family = 'Roboto'; // Default font family
+$font_family = 'Quicksand'; // Default font family
 $button_size = ''; // Default button size (empty for default size)
 $button_type = 'primary'; // Default button type
 
@@ -51,8 +49,8 @@ $bootstrap_dark_color = '#212529'; // Bootstrap default dark
 
 // List of allowed Google Fonts
 $allowed_fonts = [
-    'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Raleway', 'Poppins', 
-    'Nunito', 'Playfair Display', 'Merriweather', 'Ubuntu', 'Rubik', 
+    'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Raleway', 'Poppins',
+    'Nunito', 'Playfair Display', 'Merriweather', 'Ubuntu', 'Rubik',
     'Source Sans Pro', 'PT Sans', 'Oswald', 'Quicksand'
 ];
 
@@ -251,9 +249,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
-// Include header after form processing
-require_once 'header.php';
 
 // Function to generate site settings preview
 function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family, $button_size = '', $button_type = 'primary', $override_bootstrap_colors = false, $bootstrap_primary = '#0d6efd', $bootstrap_secondary = '#6c757d', $bootstrap_success = '#198754', $bootstrap_danger = '#dc3545', $bootstrap_warning = '#ffc107', $bootstrap_info = '#0dcaf0', $bootstrap_light = '#f8f9fa', $bootstrap_dark = '#212529', $font_size_percentage = '100%') {
@@ -531,7 +526,7 @@ function generatePreviewCSS($primary, $bg, $card_bg, $text, $font, $font_family,
                                 <select class="form-select" id="button_size" name="button_size">
                                     <?php foreach ($allowed_button_sizes as $size): ?>
                                         <option value="<?php echo $size; ?>" <?php echo $size === $button_size ? 'selected' : ''; ?>>
-                                            <?php 
+                                            <?php
                                                 if ($size === '') echo 'Default';
                                                 elseif ($size === 'sm') echo 'Small';
                                                 elseif ($size === 'lg') echo 'Large';
@@ -868,7 +863,7 @@ document.addEventListener('DOMContentLoaded', function() {
         textColorInput.value = '#212529';
         fontSizeInput.value = '16px';
         globalFontSizePercentageInput.value = '100%';
-        fontFamilyInput.value = 'Roboto';
+        fontFamilyInput.value = 'Quicksand';
         buttonSizeInput.value = ''; // Default size
         buttonTypeInput.value = 'primary'; // Default type
 
@@ -1099,4 +1094,3 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <?php require_once 'footer.php'; ?>
-}
