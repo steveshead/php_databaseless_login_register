@@ -197,9 +197,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
                 switch ($color_type) {
                     case 'primary':
-                        $primary_color_to_use = (isset($scheme['override_bootstrap_colors']) && $scheme['override_bootstrap_colors'] && isset($scheme['bootstrap_primary_color'])) 
-                            ? $scheme['bootstrap_primary_color'] 
-                            : $scheme['primary_color'];
+                        $primary_color_to_use = (isset($scheme['override_bootstrap_colors']) && $scheme['override_bootstrap_colors'] && isset($scheme['bootstrap_primary_color'])) ? $scheme['bootstrap_primary_color'] : $scheme['primary_color'];
                         echo 'color: ' . $primary_color_to_use . ' !important; border-color: ' . $primary_color_to_use . ' !important;';
                         break;
                     case 'secondary':

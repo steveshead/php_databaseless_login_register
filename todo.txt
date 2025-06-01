@@ -1,0 +1,4 @@
+To Do:
+
+Fix global button color (button_type) not propogating
+Fix having to hit submit twice for site settings page to refresh

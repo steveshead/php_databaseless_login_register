@@ -92,8 +92,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // ... (rest of the code remains the same)
     }
 }
-
-// Include header after form processing
 require_once 'header.php';
 ?>
 
@@ -125,6 +123,9 @@ require_once 'header.php';
                                 </div>
                                 <div class="form-text">Adjust global font size by percentage for all users (e.g., 100% for default, 120% for larger, 80% for smaller)</div>
                             </div>
+                            <!-- ... -->
+                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                            <!-- ... -->
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -137,12 +138,5 @@ require_once 'header.php';
         </div>
     </div>
 </div>
-
-<form action="global_settings.php" method="post">
-    <!-- ... -->
-    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-    <!-- ... -->
-</form>
-
 
 <?php require_once 'footer.php'; ?>

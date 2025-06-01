@@ -14,5 +14,7 @@
 
     <!-- Bootstrap 5.3.6 JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <!-- Site specific scripts -->
+    <script src="scripts.js"></script>
+    </body>
 </html>
