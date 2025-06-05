@@ -1,6 +1,117 @@
 <?php
 session_start();
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// Helper functions for styling
+function getPrimaryColor($scheme) {
+    return (isset($scheme['override_bootstrap_colors']) && $scheme['override_bootstrap_colors'] && isset($scheme['bootstrap_primary_color'])) 
+        ? $scheme['bootstrap_primary_color'] 
+        : $scheme['primary_color'];
+}
+
+function getButtonColorCSS($type, $scheme, $isOutline = false) {
+    $css = '';
+
+    if ($isOutline) {
+        $css .= 'background-color: transparent !important; ';
+
+        switch ($type) {
+            case 'primary':
+                $primary_color = getPrimaryColor($scheme);
+                $css .= 'color: ' . $primary_color . ' !important; border-color: ' . $primary_color . ' !important;';
+                break;
+            case 'secondary':
+                $css .= 'color: #6c757d !important; border-color: #6c757d !important;';
+                break;
+            case 'success':
+                $css .= 'color: #198754 !important; border-color: #198754 !important;';
+                break;
+            case 'danger':
+                $css .= 'color: #dc3545 !important; border-color: #dc3545 !important;';
+                break;
+            case 'warning':
+                $css .= 'color: #ffc107 !important; border-color: #ffc107 !important;';
+                break;
+            case 'info':
+                $css .= 'color: #0dcaf0 !important; border-color: #0dcaf0 !important;';
+                break;
+            case 'light':
+                $css .= 'color: #f8f9fa !important; border-color: #f8f9fa !important;';
+                break;
+            case 'dark':
+                $css .= 'color: #212529 !important; border-color: #212529 !important;';
+                break;
+        }
+    } else {
+        switch ($type) {
+            case 'primary':
+                $primary_color = getPrimaryColor($scheme);
+                $css .= 'background-color: ' . $primary_color . ' !important; border-color: ' . $primary_color . ' !important; color: #fff !important;';
+                break;
+            case 'secondary':
+                $css .= 'background-color: #6c757d !important; border-color: #6c757d !important; color: #fff !important;';
+                break;
+            case 'success':
+                $css .= 'background-color: #198754 !important; border-color: #198754 !important; color: #fff !important;';
+                break;
+            case 'danger':
+                $css .= 'background-color: #dc3545 !important; border-color: #dc3545 !important; color: #fff !important;';
+                break;
+            case 'warning':
+                $css .= 'background-color: #ffc107 !important; border-color: #ffc107 !important; color: #212529 !important;';
+                break;
+            case 'info':
+                $css .= 'background-color: #0dcaf0 !important; border-color: #0dcaf0 !important; color: #212529 !important;';
+                break;
+            case 'light':
+                $css .= 'background-color: #f8f9fa !important; border-color: #f8f9fa !important; color: #212529 !important;';
+                break;
+            case 'dark':
+                $css .= 'background-color: #212529 !important; border-color: #212529 !important; color: #fff !important;';
+                break;
+            case 'link':
+                $primary_color = getPrimaryColor($scheme);
+                $css .= 'background-color: transparent !important; border-color: transparent !important; color: ' . $primary_color . ' !important; text-decoration: underline !important;';
+                break;
+        }
+    }
+
+    return $css;
+}
+
+function getButtonHoverCSS($type, $scheme) {
+    $css = '';
+
+    switch ($type) {
+        case 'primary':
+            $primary_color = getPrimaryColor($scheme);
+            $css .= 'background-color: ' . $primary_color . ' !important; color: #fff !important;';
+            break;
+        case 'secondary':
+            $css .= 'background-color: #6c757d !important; color: #fff !important;';
+            break;
+        case 'success':
+            $css .= 'background-color: #198754 !important; color: #fff !important;';
+            break;
+        case 'danger':
+            $css .= 'background-color: #dc3545 !important; color: #fff !important;';
+            break;
+        case 'warning':
+            $css .= 'background-color: #ffc107 !important; color: #212529 !important;';
+            break;
+        case 'info':
+            $css .= 'background-color: #0dcaf0 !important; color: #212529 !important;';
+            break;
+        case 'light':
+            $css .= 'background-color: #f8f9fa !important; color: #212529 !important;';
+            break;
+        case 'dark':
+            $css .= 'background-color: #212529 !important; color: #fff !important;';
+            break;
+    }
+
+    return $css;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -180,117 +291,83 @@ $current_page = basename($_SERVER['PHP_SELF']);
         }
 
         // Apply button type if set
-        if (isset($scheme['button_type']) && $scheme['button_type'] !== 'primary') {
-            // First, reset all buttons to have no specific styling
+        if (isset($scheme['button_type'])) {
+            // Get the button type
+            $type = $scheme['button_type'];
+
+            // First, reset all buttons without specific styling
             echo '.btn:not([class*="btn-"]) { ';
             echo 'background-color: transparent !important; border: 1px solid transparent !important; color: #212529 !important;';
             echo ' }';
 
-            // Then apply the selected button type
-            $type = $scheme['button_type'];
-
             if (strpos($type, 'outline-') === 0) {
                 // Handle outline button types
                 $color_type = str_replace('outline-', '', $type);
+
+                // Apply to buttons without specific classes
                 echo '.btn:not([class*="btn-outline-"]):not([class*="btn-"]) { ';
-                echo 'background-color: transparent !important; ';
-
-                switch ($color_type) {
-                    case 'primary':
-                        $primary_color_to_use = (isset($scheme['override_bootstrap_colors']) && $scheme['override_bootstrap_colors'] && isset($scheme['bootstrap_primary_color'])) ? $scheme['bootstrap_primary_color'] : $scheme['primary_color'];
-                        echo 'color: ' . $primary_color_to_use . ' !important; border-color: ' . $primary_color_to_use . ' !important;';
-                        break;
-                    case 'secondary':
-                        echo 'color: #6c757d !important; border-color: #6c757d !important;';
-                        break;
-                    case 'success':
-                        echo 'color: #198754 !important; border-color: #198754 !important;';
-                        break;
-                    case 'danger':
-                        echo 'color: #dc3545 !important; border-color: #dc3545 !important;';
-                        break;
-                    case 'warning':
-                        echo 'color: #ffc107 !important; border-color: #ffc107 !important;';
-                        break;
-                    case 'info':
-                        echo 'color: #0dcaf0 !important; border-color: #0dcaf0 !important;';
-                        break;
-                    case 'light':
-                        echo 'color: #f8f9fa !important; border-color: #f8f9fa !important;';
-                        break;
-                    case 'dark':
-                        echo 'color: #212529 !important; border-color: #212529 !important;';
-                        break;
-                }
-
+                echo getButtonColorCSS($color_type, $scheme, true);
                 echo ' }';
 
                 // Add hover effect for outline buttons
                 echo '.btn:not([class*="btn-outline-"]):not([class*="btn-"]):hover { ';
-                switch ($color_type) {
-                    case 'primary':
-                        $primary_color_to_use = (isset($scheme['override_bootstrap_colors']) && $scheme['override_bootstrap_colors'] && isset($scheme['bootstrap_primary_color'])) 
-                            ? $scheme['bootstrap_primary_color'] 
-                            : $scheme['primary_color'];
-                        echo 'background-color: ' . $primary_color_to_use . ' !important; color: #fff !important;';
-                        break;
-                    case 'secondary':
-                        echo 'background-color: #6c757d !important; color: #fff !important;';
-                        break;
-                    case 'success':
-                        echo 'background-color: #198754 !important; color: #fff !important;';
-                        break;
-                    case 'danger':
-                        echo 'background-color: #dc3545 !important; color: #fff !important;';
-                        break;
-                    case 'warning':
-                        echo 'background-color: #ffc107 !important; color: #212529 !important;';
-                        break;
-                    case 'info':
-                        echo 'background-color: #0dcaf0 !important; color: #212529 !important;';
-                        break;
-                    case 'light':
-                        echo 'background-color: #f8f9fa !important; color: #212529 !important;';
-                        break;
-                    case 'dark':
-                        echo 'background-color: #212529 !important; color: #fff !important;';
-                        break;
-                }
+                echo getButtonHoverCSS($color_type, $scheme);
                 echo ' }';
             } else {
                 // Handle solid button types
+                // Apply to buttons without specific classes
                 echo '.btn:not([class*="btn-"]) { ';
+                echo getButtonColorCSS($type, $scheme);
+                echo ' }';
+            }
 
-                switch ($type) {
-                    case 'secondary':
-                        echo 'background-color: #6c757d !important; border-color: #6c757d !important; color: #fff !important;';
-                        break;
-                    case 'success':
-                        echo 'background-color: #198754 !important; border-color: #198754 !important; color: #fff !important;';
-                        break;
-                    case 'danger':
-                        echo 'background-color: #dc3545 !important; border-color: #dc3545 !important; color: #fff !important;';
-                        break;
-                    case 'warning':
-                        echo 'background-color: #ffc107 !important; border-color: #ffc107 !important; color: #212529 !important;';
-                        break;
-                    case 'info':
-                        echo 'background-color: #0dcaf0 !important; border-color: #0dcaf0 !important; color: #212529 !important;';
-                        break;
-                    case 'light':
-                        echo 'background-color: #f8f9fa !important; border-color: #f8f9fa !important; color: #212529 !important;';
-                        break;
-                    case 'dark':
-                        echo 'background-color: #212529 !important; border-color: #212529 !important; color: #fff !important;';
-                        break;
-                    case 'link':
-                        $primary_color_to_use = (isset($scheme['override_bootstrap_colors']) && $scheme['override_bootstrap_colors'] && isset($scheme['bootstrap_primary_color'])) 
-                            ? $scheme['bootstrap_primary_color'] 
-                            : $scheme['primary_color'];
-                        echo 'background-color: transparent !important; border-color: transparent !important; color: ' . $primary_color_to_use . ' !important; text-decoration: underline !important;';
-                        break;
-                }
+            // Apply button type to all buttons with specific classes
+            // This ensures the button style is applied consistently across all pages
 
+            // First, apply to buttons with the exact class that matches the button type
+            echo '.btn-' . $type . ' { ';
+            if (strpos($type, 'outline-') === 0) {
+                // For outline buttons
+                $color_type = str_replace('outline-', '', $type);
+                echo getButtonColorCSS($color_type, $scheme, true);
+                echo ' }';
+
+                // Add hover effect
+                echo '.btn-' . $type . ':hover { ';
+                echo getButtonHoverCSS($color_type, $scheme);
+                echo ' }';
+            } else {
+                // For solid buttons
+                echo getButtonColorCSS($type, $scheme);
+                echo ' }';
+            }
+
+            // Now apply to all buttons with specific classes, regardless of what those classes are
+            if (strpos($type, 'outline-') === 0) {
+                // For outline buttons, override all outline buttons
+                echo '.btn-outline-primary, .btn-outline-secondary, .btn-outline-success, .btn-outline-danger, .btn-outline-warning, .btn-outline-info, .btn-outline-light, .btn-outline-dark { ';
+                $color_type = str_replace('outline-', '', $type);
+                echo getButtonColorCSS($color_type, $scheme, true);
+                echo ' }';
+
+                // Add hover effect for outline buttons
+                echo '.btn-outline-primary:hover, .btn-outline-secondary:hover, .btn-outline-success:hover, .btn-outline-danger:hover, .btn-outline-warning:hover, .btn-outline-info:hover, .btn-outline-light:hover, .btn-outline-dark:hover { ';
+                echo getButtonHoverCSS($color_type, $scheme);
+                echo ' }';
+            } else {
+                // For solid buttons, override all btn-primary, btn-secondary, etc.
+                echo '.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-light, .btn-dark { ';
+                echo getButtonColorCSS($type, $scheme);
+                echo ' }';
+
+                // Also override all outline buttons
+                echo '.btn-outline-primary, .btn-outline-secondary, .btn-outline-success, .btn-outline-danger, .btn-outline-warning, .btn-outline-info, .btn-outline-light, .btn-outline-dark { ';
+                echo getButtonColorCSS($type, $scheme, true);
+                echo ' }';
+
+                // Add hover effect for outline buttons
+                echo '.btn-outline-primary:hover, .btn-outline-secondary:hover, .btn-outline-success:hover, .btn-outline-danger:hover, .btn-outline-warning:hover, .btn-outline-info:hover, .btn-outline-light:hover, .btn-outline-dark:hover { ';
+                echo getButtonHoverCSS($type, $scheme);
                 echo ' }';
             }
         }

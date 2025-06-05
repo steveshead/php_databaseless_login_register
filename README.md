@@ -1,3 +1,27 @@
+# # Welcome to our PHP Databaseless User Login and Registration System
+## ## Overview
+Our system provides a simple user login and registration functionality using JSON to store user details.
+## ### Current Date
+`2025-06-04`
+## ## Available Files
+- `index.html`
+- `register.html`
+- `scripts.js`
+- `global_settings.json`
+- `users.json`
+- `change_password.php`
+- `dashboard.php`
+- `edit_profile.php`
+- `footer.php`
+- `forms.php`
+- `global_settings.php`
+- `header.php`
+- `login.php`
+- `logout.php`
+- `register.php`
+- `secret.php`
+- `site_settings.php`
+
 ## PHP Databaseless User Login and Registration System
 
 Written in PHP this script uses JSON to store user details. It has two user roles: admin and user.
