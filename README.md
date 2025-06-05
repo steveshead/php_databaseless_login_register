@@ -1,9 +1,12 @@
-# # Welcome to our PHP Databaseless User Login and Registration System
-## ## Overview
+# Welcome to our PHP Databaseless User Login and Registration System
+
+## Overview
 Our system provides a simple user login and registration functionality using JSON to store user details.
-## ### Current Date
+
+## Current Date
 `2025-06-04`
-## ## Available Files
+
+## Available Files
 - `index.html`
 - `register.html`
 - `scripts.js`
