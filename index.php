@@ -21,13 +21,13 @@ if (file_exists($global_settings_file)) {
                     <p class="lead mb-4">A secure and user-friendly authentication system with profile management capabilities.</p>
                     <?php if ($is_logged_in): ?>
                         <div class="d-grid gap-2 d-md-flex">
-                            <a href="dashboard.php" class="btn btn-primary btn-lg px-4 me-md-2">Go to Dashboard</a>
-                            <a href="edit_profile.php" class="btn btn-outline-primary btn-lg px-4">Edit Profile</a>
+                            <a href="dashboard.php" class="btn btn-primary px-4 me-md-2">Go to Dashboard</a>
+                            <a href="edit_profile.php" class="btn btn-outline-primary px-4">Edit Profile</a>
                         </div>
                     <?php else: ?>
                         <div class="d-grid gap-2 d-md-flex">
-                            <a href="login.php" class="btn btn-primary btn-lg px-4 me-md-2">Login</a>
-                            <a href="register.php" class="btn btn-outline-primary btn-lg px-4">Register</a>
+                            <a href="login.php" class="btn btn-primary px-4 me-md-2">Login</a>
+                            <a href="register.php" class="btn btn-outline-primary px-4">Register</a>
                         </div>
                     <?php endif; ?>
                 </div>
