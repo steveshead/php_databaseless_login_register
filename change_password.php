@@ -1,6 +1,7 @@
 <?php
 $page_title = "Change Password - Login System";
 require_once 'header.php';
+require_once 'password_functions.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['username'])) {
@@ -41,42 +42,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate input
     if (empty($current_password)) {
         $error = "Current password is required";
-    } elseif (empty($new_password)) {
-        $error = "New password is required";
-    } elseif (empty($confirm_password)) {
-        $error = "Confirm password is required";
-    } elseif ($new_password !== $confirm_password) {
-        $error = "New passwords do not match";
-    } elseif (strlen($new_password) < 8) {
-        $error = "New password must be at least 8 characters long";
-    } elseif (!preg_match('/[A-Z]/', $new_password)) {
-        $error = "Password must contain at least one uppercase letter";
-    } elseif (!preg_match('/[a-z]/', $new_password)) {
-        $error = "Password must contain at least one lowercase letter";
-    } elseif (!preg_match('/[0-9]/', $new_password)) {
-        $error = "Password must contain at least one number";
-    } elseif (!preg_match('/[^A-Za-z0-9]/', $new_password)) {
-        $error = "Password must contain at least one special character";
-    } elseif (password_verify($new_password, $users[$current_user_index]["password"])) {
-        $error = "New password cannot be the same as your current password";
     } else {
-        // Verify current password
-        if (!password_verify($current_password, $users[$current_user_index]["password"])) {
-            $error = "Current password is incorrect";
+        // Validate new password using the shared function
+        $validation_result = validate_password(
+            $new_password, 
+            $confirm_password, 
+            [
+                'current_password_hash' => $users[$current_user_index]["password"]
+            ]
+        );
+
+        if (!$validation_result['valid']) {
+            $error = $validation_result['error'];
         } else {
-            // Hash new password
-            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-
-            // Update user in array
-            $users[$current_user_index]["password"] = $hashed_password;
-
-            // Save to file
-            if (file_put_contents($users_file, json_encode($users, JSON_PRETTY_PRINT))) {
-                // Redirect to dashboard page after password update
-                header("Location: dashboard.php");
-                exit();
+            // Verify current password
+            if (!password_verify($current_password, $users[$current_user_index]["password"])) {
+                $error = "Current password is incorrect";
             } else {
-                $error = "Failed to save password changes";
+                // Hash new password
+                $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+                // Update user in array
+                $users[$current_user_index]["password"] = $hashed_password;
+
+                // Save to file
+                if (file_put_contents($users_file, json_encode($users, JSON_PRETTY_PRINT))) {
+                    // Redirect to dashboard page after password update
+                    header("Location: dashboard.php");
+                    exit();
+                } else {
+                    $error = "Failed to save password changes";
+                }
             }
         }
     }

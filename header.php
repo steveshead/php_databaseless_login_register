@@ -298,12 +298,18 @@ function getButtonHoverCSS($type, $scheme) {
                             <li class="nav-item">
                                 <a class="nav-link" href="logout.php">Logout</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo $current_page == 'contact.php' ? 'active' : ''; ?>" href="contact.php">Contact</a>
+                            </li>
                         <?php else: ?>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo $current_page == 'login.php' ? 'active' : ''; ?>" href="login.php">Login</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo $current_page == 'register.php' ? 'active' : ''; ?>" href="register.php">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo $current_page == 'contact.php' ? 'active' : ''; ?>" href="contact.php">Contact</a>
                             </li>
                         <?php endif; ?>
                     </ul>
