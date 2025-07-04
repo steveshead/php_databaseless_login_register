@@ -36,36 +36,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     // Verify password
                     if (password_verify($password, $user["password"])) {
-                        // Set session variables
+                        // Set required session variables
                         $_SESSION["username"] = $username;
                         $_SESSION["email"] = $user["email"];
-
-                        // Set user role (default to "user" if not specified)
                         $_SESSION["role"] = isset($user["role"]) ? $user["role"] : "user";
 
-                        // Set first name and last name if they exist
-                        if (isset($user["first_name"])) {
-                            $_SESSION["first_name"] = $user["first_name"];
-                        }
-                        if (isset($user["last_name"])) {
-                            $_SESSION["last_name"] = $user["last_name"];
-                        }
-
-                        // Set profile picture if it exists
-                        if (isset($user["profile_picture"])) {
-                            $_SESSION["profile_picture"] = $user["profile_picture"];
-                        } else {
-                            // Set default profile picture based on role
-                            if ($_SESSION["role"] === "admin") {
-                                $_SESSION["profile_picture"] = "uploads/profile_pictures/default_admin.png";
-                            } else {
-                                $_SESSION["profile_picture"] = "uploads/profile_pictures/default_user.png";
+                        // Set optional session variables using array of field names
+                        $optional_fields = ["first_name", "last_name", "site_settings"];
+                        foreach ($optional_fields as $field) {
+                            if (isset($user[$field])) {
+                                $_SESSION[$field] = $user[$field];
                             }
                         }
 
-                        // Set site settings if it exists
-                        if (isset($user["site_settings"])) {
-                            $_SESSION["site_settings"] = $user["site_settings"];
+                        // Set profile picture with default fallback
+                        if (isset($user["profile_picture"])) {
+                            $_SESSION["profile_picture"] = $user["profile_picture"];
+                        } else {
+                            // Default based on role
+                            $default_pic = ($_SESSION["role"] === "admin") 
+                                ? "uploads/profile_pictures/default_admin.png" 
+                                : "uploads/profile_pictures/default_user.png";
+                            $_SESSION["profile_picture"] = $default_pic;
                         }
 
                         // Redirect to dashboard page

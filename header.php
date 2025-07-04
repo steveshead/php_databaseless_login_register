@@ -2,6 +2,18 @@
 session_start();
 $current_page = basename($_SERVER['PHP_SELF']);
 
+// Define bootstrap colors in a single array for easy reference
+$bootstrap_colors = [
+    'primary' => ['color' => '#0d6efd', 'text' => '#fff'],
+    'secondary' => ['color' => '#6c757d', 'text' => '#fff'],
+    'success' => ['color' => '#198754', 'text' => '#fff'],
+    'danger' => ['color' => '#dc3545', 'text' => '#fff'],
+    'warning' => ['color' => '#ffc107', 'text' => '#212529'],
+    'info' => ['color' => '#0dcaf0', 'text' => '#212529'],
+    'light' => ['color' => '#f8f9fa', 'text' => '#212529'],
+    'dark' => ['color' => '#212529', 'text' => '#fff']
+];
+
 // Helper functions for styling
 function getPrimaryColor($scheme) {
     return (isset($scheme['override_bootstrap_colors']) && $scheme['override_bootstrap_colors'] && isset($scheme['bootstrap_primary_color'])) 
@@ -9,108 +21,49 @@ function getPrimaryColor($scheme) {
         : $scheme['primary_color'];
 }
 
+function getColorValue($type, $scheme) {
+    global $bootstrap_colors;
+
+    if ($type === 'primary') {
+        return getPrimaryColor($scheme);
+    }
+
+    $color_key = "bootstrap_{$type}_color";
+    if (isset($scheme['override_bootstrap_colors']) && $scheme['override_bootstrap_colors'] && isset($scheme[$color_key])) {
+        return $scheme[$color_key];
+    }
+
+    return isset($bootstrap_colors[$type]) ? $bootstrap_colors[$type]['color'] : '#0d6efd';
+}
+
+function getTextColor($type) {
+    global $bootstrap_colors;
+    return isset($bootstrap_colors[$type]) ? $bootstrap_colors[$type]['text'] : '#fff';
+}
+
 function getButtonColorCSS($type, $scheme, $isOutline = false) {
     $css = '';
 
-    if ($isOutline) {
-        $css .= 'background-color: transparent !important; ';
-
-        switch ($type) {
-            case 'primary':
-                $primary_color = getPrimaryColor($scheme);
-                $css .= 'color: ' . $primary_color . ' !important; border-color: ' . $primary_color . ' !important;';
-                break;
-            case 'secondary':
-                $css .= 'color: #6c757d !important; border-color: #6c757d !important;';
-                break;
-            case 'success':
-                $css .= 'color: #198754 !important; border-color: #198754 !important;';
-                break;
-            case 'danger':
-                $css .= 'color: #dc3545 !important; border-color: #dc3545 !important;';
-                break;
-            case 'warning':
-                $css .= 'color: #ffc107 !important; border-color: #ffc107 !important;';
-                break;
-            case 'info':
-                $css .= 'color: #0dcaf0 !important; border-color: #0dcaf0 !important;';
-                break;
-            case 'light':
-                $css .= 'color: #f8f9fa !important; border-color: #f8f9fa !important;';
-                break;
-            case 'dark':
-                $css .= 'color: #212529 !important; border-color: #212529 !important;';
-                break;
-        }
-    } else {
-        switch ($type) {
-            case 'primary':
-                $primary_color = getPrimaryColor($scheme);
-                $css .= 'background-color: ' . $primary_color . ' !important; border-color: ' . $primary_color . ' !important; color: #fff !important;';
-                break;
-            case 'secondary':
-                $css .= 'background-color: #6c757d !important; border-color: #6c757d !important; color: #fff !important;';
-                break;
-            case 'success':
-                $css .= 'background-color: #198754 !important; border-color: #198754 !important; color: #fff !important;';
-                break;
-            case 'danger':
-                $css .= 'background-color: #dc3545 !important; border-color: #dc3545 !important; color: #fff !important;';
-                break;
-            case 'warning':
-                $css .= 'background-color: #ffc107 !important; border-color: #ffc107 !important; color: #212529 !important;';
-                break;
-            case 'info':
-                $css .= 'background-color: #0dcaf0 !important; border-color: #0dcaf0 !important; color: #212529 !important;';
-                break;
-            case 'light':
-                $css .= 'background-color: #f8f9fa !important; border-color: #f8f9fa !important; color: #212529 !important;';
-                break;
-            case 'dark':
-                $css .= 'background-color: #212529 !important; border-color: #212529 !important; color: #fff !important;';
-                break;
-            case 'link':
-                $primary_color = getPrimaryColor($scheme);
-                $css .= 'background-color: transparent !important; border-color: transparent !important; color: ' . $primary_color . ' !important; text-decoration: underline !important;';
-                break;
-        }
+    if ($type === 'link') {
+        $primary_color = getPrimaryColor($scheme);
+        return 'background-color: transparent !important; border-color: transparent !important; color: ' . $primary_color . ' !important; text-decoration: underline !important;';
     }
 
-    return $css;
+    $color = getColorValue($type, $scheme);
+    $text_color = getTextColor($type);
+
+    if ($isOutline) {
+        return 'background-color: transparent !important; color: ' . $color . ' !important; border-color: ' . $color . ' !important;';
+    } else {
+        return 'background-color: ' . $color . ' !important; border-color: ' . $color . ' !important; color: ' . $text_color . ' !important;';
+    }
 }
 
 function getButtonHoverCSS($type, $scheme) {
-    $css = '';
+    $color = getColorValue($type, $scheme);
+    $text_color = getTextColor($type);
 
-    switch ($type) {
-        case 'primary':
-            $primary_color = getPrimaryColor($scheme);
-            $css .= 'background-color: ' . $primary_color . ' !important; color: #fff !important;';
-            break;
-        case 'secondary':
-            $css .= 'background-color: #6c757d !important; color: #fff !important;';
-            break;
-        case 'success':
-            $css .= 'background-color: #198754 !important; color: #fff !important;';
-            break;
-        case 'danger':
-            $css .= 'background-color: #dc3545 !important; color: #fff !important;';
-            break;
-        case 'warning':
-            $css .= 'background-color: #ffc107 !important; color: #212529 !important;';
-            break;
-        case 'info':
-            $css .= 'background-color: #0dcaf0 !important; color: #212529 !important;';
-            break;
-        case 'light':
-            $css .= 'background-color: #f8f9fa !important; color: #212529 !important;';
-            break;
-        case 'dark':
-            $css .= 'background-color: #212529 !important; color: #fff !important;';
-            break;
-    }
-
-    return $css;
+    return 'background-color: ' . $color . ' !important; color: ' . $text_color . ' !important;';
 }
 ?>
 <!DOCTYPE html>
@@ -150,37 +103,14 @@ function getButtonHoverCSS($type, $scheme) {
 
         // Apply bootstrap color overrides if enabled
         if (isset($scheme['override_bootstrap_colors']) && $scheme['override_bootstrap_colors']) {
-            if (isset($scheme['bootstrap_primary_color'])) {
-                echo '--bs-primary: ' . $scheme['bootstrap_primary_color'] . ' !important;';
-                echo '--bs-primary-rgb: ' . implode(', ', sscanf($scheme['bootstrap_primary_color'], "#%02x%02x%02x")) . ' !important;';
-            }
-            if (isset($scheme['bootstrap_secondary_color'])) {
-                echo '--bs-secondary: ' . $scheme['bootstrap_secondary_color'] . ' !important;';
-                echo '--bs-secondary-rgb: ' . implode(', ', sscanf($scheme['bootstrap_secondary_color'], "#%02x%02x%02x")) . ' !important;';
-            }
-            if (isset($scheme['bootstrap_success_color'])) {
-                echo '--bs-success: ' . $scheme['bootstrap_success_color'] . ' !important;';
-                echo '--bs-success-rgb: ' . implode(', ', sscanf($scheme['bootstrap_success_color'], "#%02x%02x%02x")) . ' !important;';
-            }
-            if (isset($scheme['bootstrap_danger_color'])) {
-                echo '--bs-danger: ' . $scheme['bootstrap_danger_color'] . ' !important;';
-                echo '--bs-danger-rgb: ' . implode(', ', sscanf($scheme['bootstrap_danger_color'], "#%02x%02x%02x")) . ' !important;';
-            }
-            if (isset($scheme['bootstrap_warning_color'])) {
-                echo '--bs-warning: ' . $scheme['bootstrap_warning_color'] . ' !important;';
-                echo '--bs-warning-rgb: ' . implode(', ', sscanf($scheme['bootstrap_warning_color'], "#%02x%02x%02x")) . ' !important;';
-            }
-            if (isset($scheme['bootstrap_info_color'])) {
-                echo '--bs-info: ' . $scheme['bootstrap_info_color'] . ' !important;';
-                echo '--bs-info-rgb: ' . implode(', ', sscanf($scheme['bootstrap_info_color'], "#%02x%02x%02x")) . ' !important;';
-            }
-            if (isset($scheme['bootstrap_light_color'])) {
-                echo '--bs-light: ' . $scheme['bootstrap_light_color'] . ' !important;';
-                echo '--bs-light-rgb: ' . implode(', ', sscanf($scheme['bootstrap_light_color'], "#%02x%02x%02x")) . ' !important;';
-            }
-            if (isset($scheme['bootstrap_dark_color'])) {
-                echo '--bs-dark: ' . $scheme['bootstrap_dark_color'] . ' !important;';
-                echo '--bs-dark-rgb: ' . implode(', ', sscanf($scheme['bootstrap_dark_color'], "#%02x%02x%02x")) . ' !important;';
+            $color_types = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
+
+            foreach ($color_types as $type) {
+                $color_key = "bootstrap_{$type}_color";
+                if (isset($scheme[$color_key])) {
+                    echo "--bs-{$type}: " . $scheme[$color_key] . " !important;";
+                    echo "--bs-{$type}-rgb: " . implode(', ', sscanf($scheme[$color_key], "#%02x%02x%02x")) . " !important;";
+                }
             }
         }
 
@@ -233,47 +163,19 @@ function getButtonHoverCSS($type, $scheme) {
 
             // Apply bootstrap color overrides to standard button classes if enabled
             if (isset($scheme['override_bootstrap_colors']) && $scheme['override_bootstrap_colors']) {
-                if (isset($scheme['bootstrap_secondary_color'])) {
-                    echo '.btn-secondary { background-color: ' . $scheme['bootstrap_secondary_color'] . ' !important; border-color: ' . $scheme['bootstrap_secondary_color'] . ' !important; }';
-                    echo '.btn-outline-secondary { color: ' . $scheme['bootstrap_secondary_color'] . ' !important; border-color: ' . $scheme['bootstrap_secondary_color'] . ' !important; }';
-                    echo '.btn-outline-secondary:hover { background-color: ' . $scheme['bootstrap_secondary_color'] . ' !important; color: #fff !important; }';
-                    echo '.bg-secondary { background-color: ' . $scheme['bootstrap_secondary_color'] . ' !important; }';
-                }
-                if (isset($scheme['bootstrap_success_color'])) {
-                    echo '.btn-success { background-color: ' . $scheme['bootstrap_success_color'] . ' !important; border-color: ' . $scheme['bootstrap_success_color'] . ' !important; }';
-                    echo '.btn-outline-success { color: ' . $scheme['bootstrap_success_color'] . ' !important; border-color: ' . $scheme['bootstrap_success_color'] . ' !important; }';
-                    echo '.btn-outline-success:hover { background-color: ' . $scheme['bootstrap_success_color'] . ' !important; color: #fff !important; }';
-                    echo '.bg-success { background-color: ' . $scheme['bootstrap_success_color'] . ' !important; }';
-                }
-                if (isset($scheme['bootstrap_danger_color'])) {
-                    echo '.btn-danger { background-color: ' . $scheme['bootstrap_danger_color'] . ' !important; border-color: ' . $scheme['bootstrap_danger_color'] . ' !important; }';
-                    echo '.btn-outline-danger { color: ' . $scheme['bootstrap_danger_color'] . ' !important; border-color: ' . $scheme['bootstrap_danger_color'] . ' !important; }';
-                    echo '.btn-outline-danger:hover { background-color: ' . $scheme['bootstrap_danger_color'] . ' !important; color: #fff !important; }';
-                    echo '.bg-danger { background-color: ' . $scheme['bootstrap_danger_color'] . ' !important; }';
-                }
-                if (isset($scheme['bootstrap_warning_color'])) {
-                    echo '.btn-warning { background-color: ' . $scheme['bootstrap_warning_color'] . ' !important; border-color: ' . $scheme['bootstrap_warning_color'] . ' !important; color: #212529 !important; }';
-                    echo '.btn-outline-warning { color: ' . $scheme['bootstrap_warning_color'] . ' !important; border-color: ' . $scheme['bootstrap_warning_color'] . ' !important; }';
-                    echo '.btn-outline-warning:hover { background-color: ' . $scheme['bootstrap_warning_color'] . ' !important; color: #212529 !important; }';
-                    echo '.bg-warning { background-color: ' . $scheme['bootstrap_warning_color'] . ' !important; }';
-                }
-                if (isset($scheme['bootstrap_info_color'])) {
-                    echo '.btn-info { background-color: ' . $scheme['bootstrap_info_color'] . ' !important; border-color: ' . $scheme['bootstrap_info_color'] . ' !important; color: #212529 !important; }';
-                    echo '.btn-outline-info { color: ' . $scheme['bootstrap_info_color'] . ' !important; border-color: ' . $scheme['bootstrap_info_color'] . ' !important; }';
-                    echo '.btn-outline-info:hover { background-color: ' . $scheme['bootstrap_info_color'] . ' !important; color: #212529 !important; }';
-                    echo '.bg-info { background-color: ' . $scheme['bootstrap_info_color'] . ' !important; }';
-                }
-                if (isset($scheme['bootstrap_light_color'])) {
-                    echo '.btn-light { background-color: ' . $scheme['bootstrap_light_color'] . ' !important; border-color: ' . $scheme['bootstrap_light_color'] . ' !important; color: #212529 !important; }';
-                    echo '.btn-outline-light { color: ' . $scheme['bootstrap_light_color'] . ' !important; border-color: ' . $scheme['bootstrap_light_color'] . ' !important; }';
-                    echo '.btn-outline-light:hover { background-color: ' . $scheme['bootstrap_light_color'] . ' !important; color: #212529 !important; }';
-                    echo '.bg-light { background-color: ' . $scheme['bootstrap_light_color'] . ' !important; }';
-                }
-                if (isset($scheme['bootstrap_dark_color'])) {
-                    echo '.btn-dark { background-color: ' . $scheme['bootstrap_dark_color'] . ' !important; border-color: ' . $scheme['bootstrap_dark_color'] . ' !important; }';
-                    echo '.btn-outline-dark { color: ' . $scheme['bootstrap_dark_color'] . ' !important; border-color: ' . $scheme['bootstrap_dark_color'] . ' !important; }';
-                    echo '.btn-outline-dark:hover { background-color: ' . $scheme['bootstrap_dark_color'] . ' !important; color: #fff !important; }';
-                    echo '.bg-dark { background-color: ' . $scheme['bootstrap_dark_color'] . ' !important; }';
+                $color_types = ['secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
+
+                foreach ($color_types as $type) {
+                    $color_key = "bootstrap_{$type}_color";
+                    if (isset($scheme[$color_key])) {
+                        $color = $scheme[$color_key];
+                        $text_color = ($type === 'warning' || $type === 'info' || $type === 'light') ? '#212529' : '#fff';
+
+                        echo ".btn-{$type} { background-color: {$color} !important; border-color: {$color} !important; color: {$text_color} !important; }";
+                        echo ".btn-outline-{$type} { color: {$color} !important; border-color: {$color} !important; }";
+                        echo ".btn-outline-{$type}:hover { background-color: {$color} !important; color: {$text_color} !important; }";
+                        echo ".bg-{$type} { background-color: {$color} !important; }";
+                    }
                 }
             }
         }
